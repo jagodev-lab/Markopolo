@@ -1,0 +1,24 @@
+{
+  "name": "markopolo",
+  "version": "1.0.0",
+  "description": "Blockchain explorer built on vDinar",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jagodev-lab/Markopolo.git"
+  },
+  "author": "Jagodev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jagodev-lab/Markopolo/issues"
+  },
+  "homepage": "https://github.com/jagodev-lab/Markopolo#readme",
+  "dependencies": {
+    "@vdinar/vdinar-rpc": "^0.1.0",
+    "express": "^4.16.4",
+    "pug": "^2.0.3"
+  }
+}
