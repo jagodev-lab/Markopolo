@@ -133,6 +133,7 @@ app.get('/api/getlastblocks', function (req, res) {
   }
 
   var blocks = []
+  var calculated = 0;
 
   client.getBlockchainInfo().then((info) => {
     const bestHeight = info.blocks - offset
@@ -144,16 +145,18 @@ app.get('/api/getlastblocks', function (req, res) {
         client.getBlockHash(height).then((hash) => {
           client.getBlock(hash).then((result) => {
             blocks[bestHeight - result.height] = result
+            calculated++
 
-            if (bestHeight - result.height == 9) {
+            if (calculated == 10) {
               res.json(blocks)
             }
           })
         })
       } else {
         blocks[i] = { error: true, message: 'Block has a negative index.' }
+        calculated++
 
-        if (blocks.length == 10) {
+        if (calculated == 10) {
           res.json(blocks)
         }
       }
