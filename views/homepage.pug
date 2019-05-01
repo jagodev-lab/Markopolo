@@ -42,5 +42,8 @@ html
                     div(class='blocks-td', id='blockIndex' + i)
                     div(class='blocks-td', id='blockHash' + i)
                     div(class='blocks-td', id='blockTxCount' + i)
+              div(class='blocks-footer')
+                - for (var i = 1; i <= 20; i++)
+                  div(class='blocks-page' + ((i == 1) ? ' blocks-page--selected' : ''), id='blocksPage' + i, onclick='updateBlocksPage(' + i + '); return false;')= i
     |
     include includes/footer.pug

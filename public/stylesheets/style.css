@@ -270,6 +270,53 @@ a:hover, a:active, a:focus
   height: 18px;
 }
 
+.summary .last-blocks .blocks-footer
+{
+  border-collapse: collapse;
+  display: table;
+  width: 100%;
+}
+
+.summary .last-blocks .blocks-footer .blocks-page
+{
+  background-color: #000066;
+  //border: 1px solid #eeeeee;
+  color: #ffffff;
+  display: table-cell;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 22px;
+  padding: 10px 0px 10px 0px;
+  text-align: center;
+  width: 5%;
+}
+
+.summary .last-blocks .blocks-footer .blocks-page:hover
+{
+  cursor: pointer;
+}
+
+.summary .last-blocks .blocks-footer .blocks-page:first-child
+{
+  border-bottom-left-radius: 10px;
+}
+
+.summary .last-blocks .blocks-footer .blocks-page:last-child
+{
+  border-bottom-right-radius: 10px;
+}
+
+.summary .last-blocks .blocks-footer .blocks-page--selected
+{
+  background-color: #000033;
+  color: #999999;
+}
+
+.summary .last-blocks .blocks-footer .blocks-page--selected:hover
+{
+  cursor: default;
+}
+
 .footer
 {
   background-color: #222222;
