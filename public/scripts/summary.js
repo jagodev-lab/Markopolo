@@ -15,8 +15,8 @@ function updateCoinInfo()
     {
       const result = JSON.parse(this.responseText);
 
-      var hashrate = (result.networkhashps / 1024 / 1024).toFixed(3);
-      var difficulty = (result.difficulty).toFixed(3);
+      const hashrate = (result.networkhashps / 1024 / 1024).toFixed(3);
+      const difficulty = (result.difficulty).toFixed(3);
       document.getElementById("coinInfoHashrate").innerHTML = hashrate;
       document.getElementById("coinInfoDifficulty").innerHTML = difficulty;
     }
@@ -60,7 +60,17 @@ function updateBlocks()
 
 function updateBlocksPage(newPage)
 {
+  if(newPage == page)
+  {
+    return;
+  }
+
+  document.getElementById("blocksPage" + page).classList.remove("blocks-page--selected");
+  document.getElementById("blocksPage" + newPage).classList.add("blocks-page--selected");
+
   page = newPage;
+
+  updateBlocks();
 }
 
 function updateSummary()
