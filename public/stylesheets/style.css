@@ -44,6 +44,7 @@ a:hover, a:active, a:focus
 
 .header .menu a
 {
+  margin: 0px 0px 0px 15px;
   text-decoration: none;
 }
 
@@ -56,8 +57,13 @@ a:hover, a:active, a:focus
   display: inline-block;
   font-size: 18px;
   line-height: 20px;
-  margin: 0px 0px 0px 15px;
+  margin: 0px 0px 0px 0px;
   padding: 10px 15px 10px 15px;
+}
+
+.header .menu li:hover
+{
+  background-color: rgba(150, 150, 255, 0.2);
 }
 
 .body
