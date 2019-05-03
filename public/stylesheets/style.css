@@ -7,7 +7,8 @@ html, body
 body
 {
   background-color: #f6f6f6;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 a:hover, a:active, a:focus
@@ -17,7 +18,7 @@ a:hover, a:active, a:focus
 
 .header
 {
-  background-color: #ffffff;
+  background-color: #4444aa;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
   padding: 10px 20px 10px 20px;
   width: calc(100% - 40px);
@@ -25,7 +26,7 @@ a:hover, a:active, a:focus
 
 .header h1
 {
-  color: #222266;
+  color: #ffffff;
   display: inline-block;
   font-size: 32px;
   line-height: 40px;
@@ -48,9 +49,10 @@ a:hover, a:active, a:focus
 
 .header .menu li
 {
+  background-color: rgba(150, 150, 255, 0.1);
   border-radius: 10px;
-  box-shadow: 2px 2px 2px rgba(20, 20, 150, 0.3);
-  color: #222299;
+  box-shadow: 2px 2px 2px rgba(20, 20, 50, 0.3);
+  color: #ffffff;
   display: inline-block;
   font-size: 18px;
   line-height: 20px;
@@ -140,7 +142,7 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .website .title
 {
-  color: #008b8b;
+  color: #4444cc;
   font-size: 18px;
   font-weight: bold;
   line-height: 20px;
@@ -149,7 +151,7 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .website .url
 {
-  color: #22cccc;
+  color: #6666cc;
   font-size: 16px;
   line-height: 18px;
 }
@@ -195,7 +197,7 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .search-bar input[type=submit]
 {
-  background-color: #00ce00;
+  background-color: #00cc00;
   border-bottom: 2px solid #009900;
   border-left: none;
   border-right: 2px solid #00cc00;
@@ -211,6 +213,12 @@ a:hover, a:active, a:focus
   padding: 5px 0px 5px 0px;
   text-align: center;
   width: 130px;
+}
+
+.summary .last-blocks .search-bar input[type=submit]:hover
+{
+  background-color: #00ee00;
+  cursor: pointer;
 }
 
 .summary .last-blocks .blocks-table
@@ -249,7 +257,7 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-tr--main .blocks-td
 {
-  background-color: #000066;
+  background-color: #6666cc;
   display: table-cell;
 }
 
@@ -267,7 +275,9 @@ a:hover, a:active, a:focus
 {
   border: 1px solid #eeeeee;
   display: table-cell;
-  height: 18px;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 10px 0px 10px 0px;
 }
 
 .summary .last-blocks .blocks-footer
@@ -279,20 +289,21 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-footer .blocks-page
 {
-  background-color: #000066;
+  background-color: #6666cc;
   //border: 1px solid #eeeeee;
   color: #ffffff;
   display: table-cell;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
-  line-height: 22px;
-  padding: 10px 0px 10px 0px;
+  line-height: 18px;
+  padding: 8px 0px 9px 0px;
   text-align: center;
   width: 5%;
 }
 
 .summary .last-blocks .blocks-footer .blocks-page:hover
 {
+  background-color: #6666ff;
   cursor: pointer;
 }
 
@@ -308,25 +319,26 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-footer .blocks-page--selected
 {
-  background-color: #000033;
+  background-color: #3333aa;
   color: #999999;
 }
 
 .summary .last-blocks .blocks-footer .blocks-page--selected:hover
 {
+  background-color: #3333cc;
   cursor: default;
 }
 
 .footer
 {
-  background-color: #222222;
+  background-color: #ffffff;
   padding: 40px 0px 40px 0px;
   text-align: center;
 }
 
 .footer .copyright
 {
-  color: #cccccc;
+  color: #222222;
   font-size: 18px;
   line-height: 20px;
   margin: 0px 0px 40px 0px;
@@ -348,9 +360,9 @@ a:hover, a:active, a:focus
 
 .footer ul li
 {
-  border: 1px dashed #ffffff;
+  border: 1px dashed #222222;
   border-radius: 5px;
-  color: #ffffff;
+  color: #222222;
   font-size: 16px;
   line-height: 18px;
   padding: 4px 10px 4px 10px;
