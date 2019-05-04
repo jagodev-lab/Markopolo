@@ -168,4 +168,22 @@ app.get('/api/getmininginfo', function (req, res) {
   client.getMiningInfo().then((result) => res.json(result))
 })
 
+app.get('/api/getrawtransaction', function (req, res) {
+  if (typeof req.query.id != 'undefined') {
+    const id = req.query.id
+    const idReg = new RegExp('^([a-zA-Z0-9]{64})$')
+
+    if (hashReg.test(id)) {
+      client.getRawTransaction(req.query.id).then((result) => res.json(result))
+      .catch((error) => {
+        res.json({ error: true, message: 'Transaction id does not correspond to any existing transaction.' })
+      })
+    } else {
+      res.json({ error: true, message: 'Transaction id is not valid.' })
+    }
+  } else {
+    res.json({ error: true, message: 'No transaction id provided.' })
+  }
+})
+
 app.listen(port, () => console.log(`Markopolo explorer listening on port ${port}!`))
