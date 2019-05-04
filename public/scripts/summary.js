@@ -58,6 +58,7 @@ function updateBlocks()
   xhttp.send();
 }
 
+var offset = 0;
 function updateBlocksPage(newPage)
 {
   if(newPage == page)
@@ -65,11 +66,51 @@ function updateBlocksPage(newPage)
     return;
   }
 
-  document.getElementById("blocksPage" + page).classList.remove("blocks-page--selected");
-  document.getElementById("blocksPage" + newPage).classList.add("blocks-page--selected");
+  // Set previously active page as inactive
+  document.getElementById("blocksPage" + (page - offset)).classList.remove("blocks-page--selected");
 
+  // Update page numbers
+  if(newPage - 10 <= 0)
+  {
+    offset = 0;
+
+    // Update pages from 2 to 20,
+    // 1st is static
+    for(var i = 2; i <= 20; i++)
+    {
+      document.getElementById("blocksPage" + i).innerHTML = i;
+      document.getElementById("blocksPage" + i).setAttribute("onclick", "updateBlocksPage(" + i + "); return false;");
+    }
+
+    // Set new page as active
+    document.getElementById("blocksPage" + newPage).classList.add("blocks-page--selected");
+  }
+  else
+  {
+    // Set an offset for pages from 3 to 20
+    offset = newPage - 10;
+
+    // Set page 2 as a divider
+    document.getElementById("blocksPage2").innerHTML = "...";
+    document.getElementById("blocksPage2").removeAttribute("onclick");
+
+    // Update pages from 3 to 20,
+    // 1st is static and 2nd is a divider
+    for(var i = 3; i <= 20; i++)
+    {
+      document.getElementById("blocksPage" + i).innerHTML = i + offset;
+      document.getElementById("blocksPage" + i).setAttribute("onclick", "updateBlocksPage(" + (i + offset) + "); return false;");
+    }
+
+    // Set new page as active,
+    // always centered as 10th page
+    document.getElementById("blocksPage10").classList.add("blocks-page--selected");
+  }
+
+  // Declare the page before calling updateBlocks
   page = newPage;
 
+  // Update the last blocks summary
   updateBlocks();
 }
 
