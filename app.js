@@ -190,7 +190,7 @@ app.get('/api/getrawtransaction', function (req, res) {
 })
 
 app.get('/api/getsupply', function (req, res) {
-  MongoClient.connect(mongoUrl, function(err, db) {
+  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
     if (err) {
       throw err
     }

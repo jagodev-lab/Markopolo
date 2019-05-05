@@ -137,7 +137,7 @@ async function readBlockchain() {
   console.log("Blockchain loaded! After " + transactions.length + " transactions confirmed supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 
   // Connect to database
-  MongoClient.connect(mongoUrl, function(err, db) {
+  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
     if (err) {
       throw err;
     }
