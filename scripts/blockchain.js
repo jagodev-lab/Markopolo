@@ -48,12 +48,12 @@ async function readBlockchain() {
         encodedTransaction = await client.getRawTransaction(block.tx[0]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
         output = transaction.vout[0];
-        supply += parseFloat(output.value);
+        supply += output.value;
 
         encodedTransaction = await client.getRawTransaction(block.tx[1]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
         output = transaction.vout[0];
-        supply += parseFloat(output.value);
+        supply += output.value;
 
         // Normal transactions
         for (var i = 2; i < block.tx.length; i++) {
