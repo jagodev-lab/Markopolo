@@ -135,6 +135,32 @@ async function readBlockchain() {
   }
 
   console.log("Blockchain loaded! After " + transactions.length + " transactions confirmed supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
+
+  // Connect to database
+  MongoClient.connect(mongoUrl, function(err, db) {
+    if (err) {
+      throw err;
+    }
+    var dbo = db.db("markopolo");
+
+    // Update supplies in collection "info"
+    dbo.collection("info").updateOne(
+      { _id: 0},
+      { $set: { supply: supply, unconfirmedSupply: unconfirmedSupply } },
+      { upsert: true },
+      function(err, res) {
+        if (err) {
+          throw err;
+        }
+
+        // TODO: update transactions and addresses
+
+        console.log("Data succesfully inserted in database!");
+
+        db.close();
+      }
+    );
+  });
 }
 
 readBlockchain();
