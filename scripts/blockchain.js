@@ -38,6 +38,9 @@ async function readBlockchain() {
       var inputRoot;
       var input;
       var output;
+      // Dividing similar processes to
+      // increase speed and avoid
+      // several if statements
       if (confirmed) {
 
         // Coinbase transactions
@@ -82,19 +85,56 @@ async function readBlockchain() {
         }
       }
       else {
-        
-      }
+        // Coinbase transactions
+        // Update supplies
+        encodedTransaction = await client.getRawTransaction(block.tx[0]);
+        transaction = await client.decodeRawTransaction(encodedTransaction);
+        output = transaction.vout[0];
+        unconfirmedSupply += parseFloat(output.value);
 
-      //console.log("Block: " + block.height + "; Transactions count: " + transactions.length + ".");
+        encodedTransaction = await client.getRawTransaction(block.tx[1]);
+        transaction = await client.decodeRawTransaction(encodedTransaction);
+        output = transaction.vout[0];
+        unconfirmedSupply += parseFloat(output.value);
+
+        // Normal transactions
+        for (var i = 2; i < block.tx.length; i++) {
+          encodedTransaction = await client.getRawTransaction(block.tx[i]);
+          transaction = await client.decodeRawTransaction(encodedTransaction);
+
+          localSupply = 0;
+
+          // Consider spent inputs as negative supply,
+          // they will be compensated by outputs
+          // This is the most precise way due to fees
+          for (var j = 0; j < transaction.vin.length; j++) {
+            encodedInputRoot = await client.getRawTransaction(transaction.vin[j].txid);
+            inputRoot = await client.decodeRawTransaction(encodedInputRoot);
+            input = inputRoot.vout[transaction.vin[j].vout];
+
+            localSupply -= input.value;
+          }
+
+          // Consider outputs as positive supply
+          // to compensate inputs
+          for (var j = 0; j < transaction.vout.length; j++) {
+            output = transaction.vout[j];
+
+            localSupply += output.value;
+          }
+
+          unconfirmedSupply += localSupply;
+        }
+      }
 
       hash = block.nextblockhash;
     }
 
     transactions = transactions.concat(newTransactions);
-    console.log("Round completed! After " + transactions.length + " transactions supply is: " + supply + " VDN");
+    console.log("Round completed! After " + transactions.length + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
   }
 
-  console.log();
+  console.log("Blockchain loaded! After " + transactions.length + " transactions confirmed supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 }
 
 readBlockchain();
