@@ -6,6 +6,9 @@ const port = 8000
 
 const client = new Client({ username: 'testuser', password: 'testpassword', port: '9433' })
 
+const MongoClient = require('mongodb').MongoClient;
+const mongoUrl = "mongodb://localhost:27017/";
+
 app.set('view engine', 'pug')
 
 app.use(express.static(__dirname + '/public'))
@@ -184,6 +187,27 @@ app.get('/api/getrawtransaction', function (req, res) {
   } else {
     res.json({ error: true, message: 'No transaction id provided.' })
   }
+})
+
+app.get('/api/getsupply', function (req, res) {
+  MongoClient.connect(mongoUrl, function(err, db) {
+    if (err) {
+      throw err
+    }
+    var dbo = db.db("markopolo")
+
+    dbo.collection("info").findOne(
+      { _id: 0 },
+      function(err, result) {
+        if (err) {
+          throw err
+        }
+
+        res.json({ confirmed: result.supply, unconfirmed: result.unconfirmedSupply })
+        db.close()
+      }
+    )
+  })
 })
 
 app.listen(port, () => console.log(`Markopolo explorer listening on port ${port}!`))
