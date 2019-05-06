@@ -13,12 +13,28 @@ function updateCoinInfo()
   {
     if(this.readyState == 4 && this.status == 200)
     {
-      const result = JSON.parse(this.responseText);
+      const miningInfo = JSON.parse(this.responseText);
 
-      const hashrate = (result.networkhashps / 1024 / 1024).toFixed(3);
-      const difficulty = (result.difficulty).toFixed(3);
-      document.getElementById("coinInfoHashrate").innerHTML = hashrate;
-      document.getElementById("coinInfoDifficulty").innerHTML = difficulty;
+      const hashrate = (miningInfo.networkhashps / 1024 / 1024).toFixed(3);
+      const difficulty = (miningInfo.difficulty).toFixed(3);
+
+      xhttp.onreadystatechange = function()
+      {
+        if(this.readyState == 4 && this.status == 200)
+        {
+          const supplyInfo = JSON.parse(this.responseText);
+
+          const supply = (supplyInfo.confirmed + supplyInfo.unconfirmed).toFixed(2);
+
+          document.getElementById("coinInfoHashrate").innerHTML = hashrate;
+          document.getElementById("coinInfoDifficulty").innerHTML = difficulty;
+
+          document.getElementById("coinInfoSupply").innerHTML = supply;
+        }
+      }
+
+      xhttp.open("GET", "/api/getsupply", true);
+      xhttp.send();
     }
   };
 
