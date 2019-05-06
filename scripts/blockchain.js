@@ -208,10 +208,29 @@ async function readBlockchain() {
         }
 
         // TODO: update transactions and addresses
+        // Remove all content from collection "addresses"
+        dbo.collection("addresses").deleteMany(
+          {},
+          function(err, res) {
+            if (err) {
+              throw err;
+            }
 
-        console.log("Data succesfully inserted in database!");
+            // Insert addresses in collection "addresses"
+            dbo.collection("addresses").insertMany(
+              addresses,
+              function(err, res) {
+                if (err) {
+                  throw err;
+                }
 
-        db.close();
+                console.log("Info and addresses updated succesfully!");
+
+                db.close();
+              }
+            );
+          }
+        );
       }
     );
   });
