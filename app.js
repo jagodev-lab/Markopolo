@@ -167,6 +167,30 @@ app.get('/api/getlastblocks', function (req, res) {
   })
 })
 
+app.get('/api/getlasttransactions', function (req, res) {
+  var offset = 0;
+
+  if (typeof req.query.page != 'undefined') {
+    const page = Math.max(0, parseInt(req.query.page) - 1)
+    offset = page * 10
+  }
+
+  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+    if (err) {
+      throw err;
+    }
+    var dbo = db.db("markopolo");
+    dbo.collection("transactions").find().sort({ _id: -1 }).skip(offset).limit(5).toArray(function(err, result) {
+      if (err) {
+        throw err;
+      }
+
+      res.json(result);
+      db.close();
+    });
+  });
+})
+
 app.get('/api/getmininginfo', function (req, res) {
   client.getMiningInfo().then((result) => res.json(result))
 })
