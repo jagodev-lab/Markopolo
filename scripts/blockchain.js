@@ -32,7 +32,7 @@ async function readBlockchain() {
       var totalBaseId = transactions.length + baseId;
       for (var i = 0; i < block.tx.length; i++) {
         newTransactions.push({
-          id: totalBaseId + i,
+          _id: totalBaseId + i,
           transaction: block.tx[i],
           block: hash,
           confirmed: confirmed,
