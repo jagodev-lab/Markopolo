@@ -27,11 +27,21 @@ async function readBlockchain() {
     while (newTransactions.length < transactionsPerRound && hash != lastHash) {
       var block = await client.getBlock(hash);
 
-      for (var i = 0; i < block.tx.length; i++) {
-        newTransactions.push(block.tx[i]);
-      }
-
       var confirmed = block.height <= lastHeight - 6;
+      var baseId = newTransactions.length;
+      var totalBaseId = transactions.length + baseId;
+      for (var i = 0; i < block.tx.length; i++) {
+        newTransactions.push({
+          id: totalBaseId + i,
+          transaction: block.tx[i],
+          block: hash,
+          confirmed: confirmed,
+          inputs: [],
+          outputs: [],
+          timestamp: block.time,
+          value: 0
+        });
+      }
 
       var encodedTransaction;
       var transaction;
@@ -58,6 +68,17 @@ async function readBlockchain() {
         } else {
           addresses[addressId].received += output.value;
         }
+        // Update transactions
+        newTransactions[baseId].inputs.push({
+            coinbase: true,
+            sender: null,
+            value: output.value
+          });
+        newTransactions[baseId].outputs.push({
+            recipient: address,
+            value: output.value
+          });
+        newTransactions[baseId].value = output.value;
         // Update supply
         supply += output.value;
 
@@ -67,6 +88,17 @@ async function readBlockchain() {
         output = transaction.vout[0];
         // Update address
         addresses[0].received += output.value;
+        // Update transactions
+        newTransactions[baseId + 1].inputs.push({
+            coinbase: true,
+            sender: null,
+            value: output.value
+          });
+        newTransactions[baseId + 1].outputs.push({
+            recipient: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB",
+            value: output.value
+          });
+        newTransactions[baseId + 1].value = output.value;
         // Update supply
         supply += output.value;
 
@@ -89,8 +121,19 @@ async function readBlockchain() {
             address = input.scriptPubKey.addresses[0];
             addressId = addresses.findIndex(x => x.address === address);
             addresses[addressId].spent += input.value;
+            // Update transactions
+            newTransactions[baseId + i].inputs.push({
+              coinbase: false,
+              sender: address,
+              value: input.value
+            });
             // Update local supply
             localSupply -= input.value;
+          }
+
+          // Update transaction's total value
+          for (var j = 0; j < newTransactions[i].inputs.length; j++) {
+            newTransactions[baseId + i].value += newTransactions[baseId + i].inputs[j].value;
           }
 
           // Consider outputs as positive supply
@@ -105,6 +148,11 @@ async function readBlockchain() {
             } else {
               addresses[addressId].received += output.value;
             }
+            // Update transactions
+            newTransactions[baseId + i].outputs.push({
+              recipient: address,
+              value: output.value
+            });
             // Update local supply
             localSupply += output.value;
           }
@@ -125,6 +173,17 @@ async function readBlockchain() {
         } else {
           addresses[addressId].received += output.value;
         }
+        // Update transactions
+        newTransactions[baseId].inputs.push({
+            coinbase: true,
+            sender: null,
+            value: output.value
+          });
+        newTransactions[baseId].outputs.push({
+            recipient: address,
+            value: output.value
+          });
+        newTransactions[baseId].value = output.value;
         // Update unconfirmed supply
         unconfirmedSupply += output.value;
 
@@ -134,6 +193,17 @@ async function readBlockchain() {
         output = transaction.vout[0];
         // Update address
         addresses[0].unconfirmedReceived += output.value;
+        // Update transactions
+        newTransactions[baseId + 1].inputs.push({
+            coinbase: true,
+            sender: null,
+            value: output.value
+          });
+        newTransactions[baseId + 1].outputs.push({
+            recipient: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB",
+            value: output.value
+          });
+        newTransactions[baseId + 1].value = output.value;
         // Update unconfirmed supply
         unconfirmedSupply += output.value;
 
@@ -156,8 +226,19 @@ async function readBlockchain() {
             address = input.scriptPubKey.addresses[0];
             addressId = addresses.findIndex(x => x.address === address);
             addresses[addressId].unconfirmedSpent += input.value;
+            // Update transactions
+            newTransactions[baseId + i].inputs.push({
+              coinbase: false,
+              sender: address,
+              value: input.value
+            });
             // Update local supply
             localSupply -= input.value;
+          }
+
+          // Update transaction's total value
+          for (var j = 0; j < newTransactions[i].inputs.length; j++) {
+            newTransactions[baseId + i].value += newTransactions[baseId + i].inputs[j].value;
           }
 
           // Consider outputs as positive supply
@@ -172,6 +253,11 @@ async function readBlockchain() {
             } else {
               addresses[addressId].unconfirmedReceived += output.value;
             }
+            // Update transactions
+            newTransactions[baseId + i].outputs.push({
+              recipient: address,
+              value: output.value
+            });
             // Update local supply
             localSupply += output.value;
           }
@@ -207,7 +293,6 @@ async function readBlockchain() {
           throw err;
         }
 
-        // TODO: update transactions and addresses
         // Remove all content from collection "addresses"
         dbo.collection("addresses").deleteMany(
           {},
@@ -225,6 +310,8 @@ async function readBlockchain() {
                 }
 
                 console.log("Info and addresses updated succesfully!");
+
+                // TODO: update transactions
 
                 db.close();
               }
