@@ -132,8 +132,8 @@ function updateBlocksPage(newPage)
 
 function updateSummary()
 {
-  updateCoinInfo();
   updateBlocks();
+  updateCoinInfo();
 }
 
 updateSummary();

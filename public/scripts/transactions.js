@@ -132,8 +132,8 @@ function updateTransactionsPage(newPage)
 
 function updateSummary()
 {
-  updateCoinInfo();
   updateTransactions();
+  updateCoinInfo();
 }
 
 updateSummary();
