@@ -293,6 +293,8 @@ async function readBlockchain() {
           throw err;
         }
 
+        console.log("Info updated succesfully!");
+
         // Remove all content from collection "addresses"
         dbo.collection("addresses").deleteMany(
           {},
@@ -309,11 +311,31 @@ async function readBlockchain() {
                   throw err;
                 }
 
-                console.log("Info and addresses updated succesfully!");
+                console.log("Addresses updated succesfully!");
 
-                // TODO: update transactions
+                // Remove all content from collection "transactions"
+                dbo.collection("transactions").deleteMany(
+                  {},
+                  function(err, res) {
+                    if (err) {
+                      throw err;
+                    }
 
-                db.close();
+                    // Insert transactions in collection "transactions"
+                    dbo.collection("transactions").insertMany(
+                      transactions,
+                      function(err, res) {
+                        if (err) {
+                          throw err;
+                        }
+
+                        console.log("Transactions updated succesfully!");
+
+                        db.close();
+                      }
+                    );
+                  }
+                );
               }
             );
           }
