@@ -18,9 +18,11 @@ async function readBlockchain() {
   // Declaring donations address as first address
   var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
 
-  console.log("Hash: " + hash);
-  console.log("Blockchain height: " + lastHeight);
-  console.log("Last hash: " + lastHash);
+  // Cyan background color
+  console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain reading started!");
+  // White background color, black font color
+  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " last block's index is " + lastHeight + ".");
+  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " last block's hash is " + lastHash + ".");
 
   while (hash != lastHash) {
     var newTransactions = [];
@@ -271,10 +273,17 @@ async function readBlockchain() {
     }
 
     transactions = transactions.concat(newTransactions);
-    console.log("Round completed! After " + transactions.length + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
+
+    // Cyan background color
+    console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " round completed!");
+    // White background color, black font color
+    console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + transactions.length + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
   }
 
-  console.log("Blockchain loaded! After " + transactions.length + " transactions confirmed supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
+  // Cyan background color
+  console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain loaded!");
+  // White background color, black font color
+  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + transactions.length + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 
   // Connect to database
   MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
@@ -293,7 +302,8 @@ async function readBlockchain() {
           throw err;
         }
 
-        console.log("Info updated succesfully!");
+        // Cyan background color
+        console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " info updated succesfully!");
 
         // Remove all content from collection "addresses"
         dbo.collection("addresses").deleteMany(
@@ -311,7 +321,8 @@ async function readBlockchain() {
                   throw err;
                 }
 
-                console.log("Addresses updated succesfully!");
+                // Cyan background color
+                console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " addresses updated succesfully!");
 
                 // Remove all content from collection "transactions"
                 dbo.collection("transactions").deleteMany(
@@ -329,7 +340,10 @@ async function readBlockchain() {
                           throw err;
                         }
 
-                        console.log("Transactions updated succesfully!");
+                        // Cyan background color
+                        console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions updated succesfully!");
+                        // Green background color
+                        console.log("\x1b[42m%s\x1b[0m%s", "SUCCESS:", " blockchain reading completed!");
 
                         db.close();
                       }
