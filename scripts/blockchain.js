@@ -12,9 +12,11 @@ async function readBlockchain() {
   const blockchainInfo = await client.getBlockchainInfo();
   const lastHeight = blockchainInfo.blocks - 1;
   const lastHash = await client.getBlockHash(lastHeight);
-  var transactions = [];
   var supply = 0;
   var unconfirmedSupply = 0;
+  var transactions = [];
+  // Declaring donations address as first address
+  var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
 
   console.log("Hash: " + hash);
   console.log("Blockchain height: " + lastHeight);
@@ -33,6 +35,8 @@ async function readBlockchain() {
 
       var encodedTransaction;
       var transaction;
+      var address;
+      var addressId;
       var localSupply;
       var encodedInputRoot;
       var inputRoot;
@@ -42,17 +46,28 @@ async function readBlockchain() {
       // increase speed and avoid
       // several if statements
       if (confirmed) {
-
-        // Coinbase transactions
-        // Update supplies
+        // Coinbase transaction 0
         encodedTransaction = await client.getRawTransaction(block.tx[0]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
         output = transaction.vout[0];
+        // Update address
+        address = output.scriptPubKey.addresses[0];
+        addressId = addresses.findIndex(x => x.address === address);
+        if (addressId == -1) {
+          addresses.push({ address: address, received: output.value, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 });
+        } else {
+          addresses[addressId].received += output.value;
+        }
+        // Update supply
         supply += output.value;
 
+        // Coinbase transaction 1
         encodedTransaction = await client.getRawTransaction(block.tx[1]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
         output = transaction.vout[0];
+        // Update address
+        addresses[0].received += output.value;
+        // Update supply
         supply += output.value;
 
         // Normal transactions
@@ -60,6 +75,7 @@ async function readBlockchain() {
           encodedTransaction = await client.getRawTransaction(block.tx[i]);
           transaction = await client.decodeRawTransaction(encodedTransaction);
 
+          // Reset local supply
           localSupply = 0;
 
           // Consider spent inputs as negative supply,
@@ -69,7 +85,11 @@ async function readBlockchain() {
             encodedInputRoot = await client.getRawTransaction(transaction.vin[j].txid);
             inputRoot = await client.decodeRawTransaction(encodedInputRoot);
             input = inputRoot.vout[transaction.vin[j].vout];
-
+            // Update address
+            address = input.scriptPubKey.addresses[0];
+            addressId = addresses.findIndex(x => x.address === address);
+            addresses[addressId].spent += input.value;
+            // Update local supply
             localSupply -= input.value;
           }
 
@@ -77,31 +97,52 @@ async function readBlockchain() {
           // to compensate inputs
           for (var j = 0; j < transaction.vout.length; j++) {
             output = transaction.vout[j];
-
+            // Update address
+            address = output.scriptPubKey.addresses[0];
+            addressId = addresses.findIndex(x => x.address === address);
+            if (addressId == -1) {
+              addresses.push({ address: address, received: output.value, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 });
+            } else {
+              addresses[addressId].received += output.value;
+            }
+            // Update local supply
             localSupply += output.value;
           }
 
+          // Update supply
           supply += localSupply;
         }
-      }
-      else {
-        // Coinbase transactions
-        // Update supplies
+      } else {
+        // Coinbase transaction 0
         encodedTransaction = await client.getRawTransaction(block.tx[0]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
         output = transaction.vout[0];
-        unconfirmedSupply += parseFloat(output.value);
+        // Update address
+        address = output.scriptPubKey.addresses[0];
+        addressId = addresses.findIndex(x => x.address === address);
+        if (addressId == -1) {
+          addresses.push({ address: address, received: 0, spent: 0, unconfirmedReceived: output.value, unconfirmedSpent: 0 });
+        } else {
+          addresses[addressId].received += output.value;
+        }
+        // Update unconfirmed supply
+        unconfirmedSupply += output.value;
 
+        // Coinbase transaction 1
         encodedTransaction = await client.getRawTransaction(block.tx[1]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
         output = transaction.vout[0];
-        unconfirmedSupply += parseFloat(output.value);
+        // Update address
+        addresses[0].unconfirmedReceived += output.value;
+        // Update unconfirmed supply
+        unconfirmedSupply += output.value;
 
         // Normal transactions
         for (var i = 2; i < block.tx.length; i++) {
           encodedTransaction = await client.getRawTransaction(block.tx[i]);
           transaction = await client.decodeRawTransaction(encodedTransaction);
 
+          // Reset local supply
           localSupply = 0;
 
           // Consider spent inputs as negative supply,
@@ -111,7 +152,11 @@ async function readBlockchain() {
             encodedInputRoot = await client.getRawTransaction(transaction.vin[j].txid);
             inputRoot = await client.decodeRawTransaction(encodedInputRoot);
             input = inputRoot.vout[transaction.vin[j].vout];
-
+            // Update address
+            address = input.scriptPubKey.addresses[0];
+            addressId = addresses.findIndex(x => x.address === address);
+            addresses[addressId].unconfirmedSpent += input.value;
+            // Update local supply
             localSupply -= input.value;
           }
 
@@ -119,10 +164,19 @@ async function readBlockchain() {
           // to compensate inputs
           for (var j = 0; j < transaction.vout.length; j++) {
             output = transaction.vout[j];
-
+            // Update address
+            address = output.scriptPubKey.addresses[0];
+            addressId = addresses.findIndex(x => x.address === address);
+            if (addressId == -1) {
+              addresses.push({ address: address, received: 0, spent: 0, unconfirmedReceived: output.value, unconfirmedSpent: 0 });
+            } else {
+              addresses[addressId].unconfirmedReceived += output.value;
+            }
+            // Update local supply
             localSupply += output.value;
           }
 
+          // Update unconfirmed supply
           unconfirmedSupply += localSupply;
         }
       }
