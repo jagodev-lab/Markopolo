@@ -1,0 +1,49 @@
+doctype html
+html
+  head
+    include includes/head.pug
+    |
+    script(src='/scripts/transactions.js')
+  body
+    include includes/header.pug
+    |
+    div(class='body')
+      div(class='transactions')
+        div(class='coin-info')
+          div(class='preview')
+            img(src='/images/coin.png')
+          div(class='info-table')
+            div(class='info-tr')
+              div(class='name') Net hashrate (MH/s)
+              div(class='value', id='coinInfoHashrate') -
+            div(class='info-tr')
+              div(class='name') Difficulty
+              div(class='value', id='coinInfoDifficulty') -
+            div(class='info-tr')
+              div(class='name') Supply
+              div(class='value', id='coinInfoSupply') -
+          a(href='https://www.vdinar.info', target='_blank')
+            div(class='website')
+              div(class='title') vDinar's official website
+              div(class='url') https://www.vdinar.info
+        div(class='last-transactions')
+          div(class='container')
+            div(class='content')
+              div(class='search-bar')
+                input(type='text', placeholder='Search for block indexes, hashes, transactions or addresses...')
+                input(type='submit', value='Search')
+              div(class='transactions-table')
+                div(class='transactions-tr transactions-tr--main')
+                  div(class='transactions-td') Transaction index
+                  div(class='transactions-td') Transaction hash
+                  div(class='transactions-td') Time
+                - for (var i = 1; i <= 10; i++)
+                  div(class='transactions-tr transactions-tr--values', id='transaction' + i)
+                    div(class='transactions-td', id='transactionIndex' + i)
+                    div(class='transactions-td', id='transactionHash' + i)
+                    div(class='transactions-td', id='transactionTime' + i)
+              div(class='transactions-footer')
+                - for (var i = 1; i <= 20; i++)
+                  div(class='transactions-page' + ((i == 1) ? ' transactions-page--selected' : ''), id='transactionsPage' + i, onclick='updateTransactionsPage(' + i + '); return false;')= i
+    |
+    include includes/footer.pug

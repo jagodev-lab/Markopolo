@@ -180,7 +180,7 @@ app.get('/api/getlasttransactions', function (req, res) {
       throw err;
     }
     var dbo = db.db("markopolo");
-    dbo.collection("transactions").find().sort({ _id: -1 }).skip(offset).limit(5).toArray(function(err, result) {
+    dbo.collection("transactions").find().sort({ _id: -1 }).skip(offset).limit(10).toArray(function(err, result) {
       if (err) {
         throw err;
       }
@@ -232,6 +232,10 @@ app.get('/api/getsupply', function (req, res) {
       }
     )
   })
+})
+
+app.get('/transactions', function (req, res) {
+  res.render('transactions', { title: 'Markopolo explorer' })
 })
 
 app.listen(port, () => console.log(`Markopolo explorer listening on port ${port}!`))

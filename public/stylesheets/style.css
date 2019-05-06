@@ -72,7 +72,8 @@ a:hover, a:active, a:focus
   padding: 20px 0px 20px 0px;
 }
 
-.summary
+.summary,
+.transactions
 {
   display: table;
   height: 567px;
@@ -80,7 +81,8 @@ a:hover, a:active, a:focus
   width: calc(100% - 40px);
 }
 
-.summary .coin-info
+.summary .coin-info,
+.transactions .coin-info
 {
   background-color: #ffffff;
   border-radius: 20px;
@@ -92,7 +94,8 @@ a:hover, a:active, a:focus
   width: 400px;
 }
 
-.summary .coin-info .preview
+.summary .coin-info .preview,
+.transactions .coin-info .preview
 {
   background-image: url("/images/preview.png");
   border-top-left-radius: 20px;
@@ -100,7 +103,8 @@ a:hover, a:active, a:focus
   height: 150px;
 }
 
-.summary .coin-info .preview img
+.summary .coin-info .preview img,
+.transactions .coin-info .preview img
 {
   border-radius: 64px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
@@ -109,7 +113,8 @@ a:hover, a:active, a:focus
   width: 128px;
 }
 
-.summary .coin-info .info-tr
+.summary .coin-info .info-tr,
+.transactions .coin-info .info-tr
 {
   border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -118,7 +123,8 @@ a:hover, a:active, a:focus
   width: calc(100% - 40px);
 }
 
-.summary .coin-info .name
+.summary .coin-info .name,
+.transactions .coin-info .name
 {
   font-size: 18px;
   font-weight: bold;
@@ -126,18 +132,21 @@ a:hover, a:active, a:focus
   margin: 0px 0px 20px 0px;
 }
 
-.summary .coin-info .value
+.summary .coin-info .value,
+.transactions .coin-info .value
 {
   font-size: 16px;
   line-height: 18px;
 }
 
-.summary .coin-info a
+.summary .coin-info a,
+.transactions .coin-info a
 {
   text-decoration: none;
 }
 
-.summary .coin-info .website
+.summary .coin-info .website,
+.transactions .coin-info .website
 {
   border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -146,7 +155,8 @@ a:hover, a:active, a:focus
   width: calc(100% - 40px);
 }
 
-.summary .coin-info .website .title
+.summary .coin-info .website .title,
+.transactions .coin-info .website .title
 {
   color: #4444cc;
   font-size: 18px;
@@ -155,21 +165,24 @@ a:hover, a:active, a:focus
   margin: 0px 0px 5px 0px;
 }
 
-.summary .coin-info .website .url
+.summary .coin-info .website .url,
+.transactions .coin-info .website .url
 {
   color: #6666cc;
   font-size: 16px;
   line-height: 18px;
 }
 
-.summary .last-blocks
+.summary .last-blocks,
+.transactions .last-transactions
 {
   display: table-cell;
   padding: 0px 0px 0px 20px;
   vertical-align: top;
 }
 
-.summary .last-blocks .container
+.summary .last-blocks .container,
+.transactions .last-transactions .container
 {
   background-color: #ffffff;
   border-radius: 20px;
@@ -179,13 +192,15 @@ a:hover, a:active, a:focus
   width: 100%;
 }
 
-.summary .last-blocks .content
+.summary .last-blocks .content,
+.transactions .last-transactions .content
 {
   margin: 20px 20px 20px 20px;
   width: calc(100% - 40px);
 }
 
-.summary .last-blocks .search-bar input[type=text]
+.summary .last-blocks .search-bar input[type=text],
+.transactions .last-transactions .search-bar input[type=text]
 {
   border-bottom: 2px solid #eeeeee;
   border-left: 2px solid #cccccc;
@@ -201,7 +216,8 @@ a:hover, a:active, a:focus
   width: calc(100% - 154px);
 }
 
-.summary .last-blocks .search-bar input[type=submit]
+.summary .last-blocks .search-bar input[type=submit],
+.transactions .last-transactions .search-bar input[type=submit]
 {
   background-color: #00cc00;
   border-bottom: 2px solid #009900;
@@ -221,13 +237,15 @@ a:hover, a:active, a:focus
   width: 130px;
 }
 
-.summary .last-blocks .search-bar input[type=submit]:hover
+.summary .last-blocks .search-bar input[type=submit]:hover,
+.transactions .last-transactions .search-bar input[type=submit]:hover
 {
   background-color: #00ee00;
   cursor: pointer;
 }
 
-.summary .last-blocks .blocks-table
+.summary .last-blocks .blocks-table,
+.transactions .last-transactions .transactions-table
 {
   border-collapse: collapse;
   display: table;
@@ -236,12 +254,14 @@ a:hover, a:active, a:focus
   width: 100%;
 }
 
-.summary .last-blocks .blocks-tr
+.summary .last-blocks .blocks-tr,
+.transactions .last-transactions .transactions-tr
 {
   display: table-row;
 }
 
-.summary .last-blocks .blocks-tr--main
+.summary .last-blocks .blocks-tr--main,
+.transactions .last-transactions .transactions-tr--main
 {
   color: #ffffff;
   font-size: 20px;
@@ -249,35 +269,41 @@ a:hover, a:active, a:focus
   line-height: 22px;
 }
 
-.summary .last-blocks .blocks-tr--values
+.summary .last-blocks .blocks-tr--values,
+.transactions .last-transactions .transactions-tr--values
 {
   font-size: 20px;
   line-height: 22px;
 }
 
-.summary .last-blocks .blocks-td
+.summary .last-blocks .blocks-td,
+.transactions .last-transactions .transactions-td
 {
   display: table-cell;
   padding: 10px 10px 10px 10px;
 }
 
-.summary .last-blocks .blocks-tr--main .blocks-td
+.summary .last-blocks .blocks-tr--main .blocks-td,
+.transactions .last-transactions .transactions-tr--main .transactions-td
 {
   background-color: #6666cc;
   display: table-cell;
 }
 
-.summary .last-blocks .blocks-tr--main .blocks-td:first-child
+.summary .last-blocks .blocks-tr--main .blocks-td:first-child,
+.transactions .last-transactions .transactions-tr--main .transactions-td:first-child
 {
   border-top-left-radius: 10px;
 }
 
-.summary .last-blocks .blocks-tr--main .blocks-td:last-child
+.summary .last-blocks .blocks-tr--main .blocks-td:last-child,
+.transactions .last-transactions .transactions-tr--main .transactions-td:last-child
 {
   border-top-right-radius: 10px;
 }
 
-.summary .last-blocks .blocks-tr--values .blocks-td
+.summary .last-blocks .blocks-tr--values .blocks-td,
+.transactions .last-transactions .transactions-tr--values .transactions-td
 {
   border: 1px solid #eeeeee;
   display: table-cell;
@@ -286,14 +312,16 @@ a:hover, a:active, a:focus
   padding: 10px 0px 10px 0px;
 }
 
-.summary .last-blocks .blocks-footer
+.summary .last-blocks .blocks-footer,
+.transactions .last-transactions .transactions-footer
 {
   border-collapse: collapse;
   display: table;
   width: 100%;
 }
 
-.summary .last-blocks .blocks-footer .blocks-page
+.summary .last-blocks .blocks-footer .blocks-page,
+.transactions .last-transactions .transactions-footer .transactions-page
 {
   background-color: #6666cc;
   //border: 1px solid #eeeeee;
@@ -307,29 +335,34 @@ a:hover, a:active, a:focus
   width: 5%;
 }
 
-.summary .last-blocks .blocks-footer .blocks-page:hover
+.summary .last-blocks .blocks-footer .blocks-page:hover,
+.transactions .last-transactions .transactions-footer .transactions-page:hover
 {
   background-color: #6666ff;
   cursor: pointer;
 }
 
-.summary .last-blocks .blocks-footer .blocks-page:first-child
+.summary .last-blocks .blocks-footer .blocks-page:first-child,
+.transactions .last-transactions .transactions-footer .transactions-page:first-child
 {
   border-bottom-left-radius: 10px;
 }
 
-.summary .last-blocks .blocks-footer .blocks-page:last-child
+.summary .last-blocks .blocks-footer .blocks-page:last-child,
+.transactions .last-transactions .transactions-footer .transactions-page:last-child
 {
   border-bottom-right-radius: 10px;
 }
 
-.summary .last-blocks .blocks-footer .blocks-page--selected
+.summary .last-blocks .blocks-footer .blocks-page--selected,
+.transactions .last-transactions .transactions-footer .transactions-page--selected
 {
   background-color: #3333aa;
   color: #999999;
 }
 
-.summary .last-blocks .blocks-footer .blocks-page--selected:hover
+.summary .last-blocks .blocks-footer .blocks-page--selected:hover,
+.transactions .last-transactions .transactions-footer .transactions-page--selected:hover
 {
   background-color: #3333cc;
   cursor: default;
