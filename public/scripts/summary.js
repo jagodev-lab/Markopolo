@@ -1,3 +1,7 @@
+function r(f){
+  /in/.test(document.readyState) ? setTimeout('r(' + f + ')', 9) : f();
+}
+
 function updateCoinInfo()
 {
   if(window.XMLHttpRequest)
@@ -136,5 +140,8 @@ function updateSummary()
   updateCoinInfo();
 }
 
-updateSummary();
-setInterval(updateSummary, 10000);
+r(function()
+  {
+    updateSummary();
+    setInterval(updateSummary, 10000);
+  });
