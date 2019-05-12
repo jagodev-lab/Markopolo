@@ -73,7 +73,8 @@ a:hover, a:active, a:focus
 }
 
 .summary,
-.transactions
+.transactions,
+.transaction
 {
   display: table;
   height: 567px;
@@ -82,7 +83,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info,
-.transactions .coin-info
+.transactions .coin-info,
+.transaction .coin-info
 {
   background-color: #ffffff;
   border-radius: 20px;
@@ -95,7 +97,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .preview,
-.transactions .coin-info .preview
+.transactions .coin-info .preview,
+.transaction .coin-info .preview
 {
   background-image: url("/images/preview.png");
   border-top-left-radius: 20px;
@@ -104,7 +107,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .preview img,
-.transactions .coin-info .preview img
+.transactions .coin-info .preview img,
+.transaction .coin-info .preview img
 {
   border-radius: 64px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
@@ -114,7 +118,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .info-tr,
-.transactions .coin-info .info-tr
+.transactions .coin-info .info-tr,
+.transaction .coin-info .info-tr
 {
   border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -124,7 +129,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .name,
-.transactions .coin-info .name
+.transactions .coin-info .name,
+.transaction .coin-info .name
 {
   font-size: 18px;
   font-weight: bold;
@@ -133,20 +139,23 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .value,
-.transactions .coin-info .value
+.transactions .coin-info .value,
+.transaction .coin-info .value
 {
   font-size: 16px;
   line-height: 18px;
 }
 
 .summary .coin-info a,
-.transactions .coin-info a
+.transactions .coin-info a,
+.transaction .coin-info a
 {
   text-decoration: none;
 }
 
 .summary .coin-info .website,
-.transactions .coin-info .website
+.transactions .coin-info .website,
+.transaction .coin-info .website
 {
   border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -156,7 +165,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .website .title,
-.transactions .coin-info .website .title
+.transactions .coin-info .website .title,
+.transaction .coin-info .website .title
 {
   color: #4444cc;
   font-size: 18px;
@@ -166,7 +176,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .coin-info .website .url,
-.transactions .coin-info .website .url
+.transactions .coin-info .website .url,
+.transaction .coin-info .website .url
 {
   color: #6666cc;
   font-size: 16px;
@@ -174,7 +185,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks,
-.transactions .last-transactions
+.transactions .last-transactions,
+.transaction .transaction-info
 {
   display: table-cell;
   padding: 0px 0px 0px 20px;
@@ -182,7 +194,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .container,
-.transactions .last-transactions .container
+.transactions .last-transactions .container,
+.transaction .transaction-info .container
 {
   background-color: #ffffff;
   border-radius: 20px;
@@ -193,7 +206,8 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .content,
-.transactions .last-transactions .content
+.transactions .last-transactions .content,
+.transaction .transaction-info .content
 {
   margin: 20px 20px 20px 20px;
   width: calc(100% - 40px);
@@ -245,7 +259,9 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .blocks-table,
-.transactions .last-transactions .transactions-table
+.transactions .last-transactions .transactions-table,
+.transaction .transaction-info .transaction-main,
+.transaction .transaction-info .transaction-summary
 {
   border-collapse: collapse;
   display: table;
@@ -255,13 +271,15 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .blocks-tr,
-.transactions .last-transactions .transactions-tr
+.transactions .last-transactions .transactions-tr,
+.transaction .transaction-info .transaction-tr
 {
   display: table-row;
 }
 
 .summary .last-blocks .blocks-tr--main,
-.transactions .last-transactions .transactions-tr--main
+.transactions .last-transactions .transactions-tr--main,
+.transaction .transaction-info .transaction-tr--main
 {
   color: #ffffff;
   font-size: 20px;
@@ -270,46 +288,144 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .blocks-tr--values,
-.transactions .last-transactions .transactions-tr--values
+.transactions .last-transactions .transactions-tr--values,
+.transaction .transaction-info .transaction-tr--values
 {
   font-size: 20px;
   line-height: 22px;
 }
 
 .summary .last-blocks .blocks-td,
-.transactions .last-transactions .transactions-td
+.transactions .last-transactions .transactions-td,
+.transaction .transaction-info .transaction-td
 {
   display: table-cell;
   padding: 10px 10px 10px 10px;
 }
 
 .summary .last-blocks .blocks-tr--main .blocks-td,
-.transactions .last-transactions .transactions-tr--main .transactions-td
+.transactions .last-transactions .transactions-tr--main .transactions-td,
+.transaction .transaction-info .transaction-tr--main .transaction-td
 {
   background-color: #6666cc;
   display: table-cell;
 }
 
 .summary .last-blocks .blocks-tr--main .blocks-td:first-child,
-.transactions .last-transactions .transactions-tr--main .transactions-td:first-child
+.transactions .last-transactions .transactions-tr--main .transactions-td:first-child,
+.transaction .transaction-info .transaction-tr--main .transaction-td:first-child
 {
   border-top-left-radius: 10px;
 }
 
 .summary .last-blocks .blocks-tr--main .blocks-td:last-child,
-.transactions .last-transactions .transactions-tr--main .transactions-td:last-child
+.transactions .last-transactions .transactions-tr--main .transactions-td:last-child,
+.transaction .transaction-info .transaction-tr--main .transaction-td:last-child
 {
   border-top-right-radius: 10px;
 }
 
 .summary .last-blocks .blocks-tr--values .blocks-td,
-.transactions .last-transactions .transactions-tr--values .transactions-td
+.transactions .last-transactions .transactions-tr--values .transactions-td,
+.transaction .transaction-info .transaction-tr--values .transaction-td
 {
   border: 1px solid #eeeeee;
   display: table-cell;
   font-size: 16px;
   line-height: 18px;
   padding: 10px 0px 10px 0px;
+}
+
+.transaction .transaction-info .transaction-main
+{
+  border-collapse: separate;
+}
+
+.transaction .transaction-info .transaction-summary
+{
+  border-collapse: separate;
+}
+
+.transaction .transaction-tr--values:last-child .transaction-td:first-child
+{
+  border-bottom-left-radius: 10px;
+}
+
+.transaction .transaction-tr--values:last-child .transaction-td:last-child
+{
+  border-bottom-right-radius: 10px;
+}
+
+.transaction .transaction-info .transaction-main .transaction-tr--values:last-child .transaction-td:last-child
+{
+  background-color: #44cc44;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.transaction .transaction-summary .transaction-td
+{
+  width: 50%;
+}
+
+.transaction .transaction-info .inputs-table,
+.transaction .transaction-info .outputs-table
+{
+  border-collapse: separate;
+  display: table;
+  margin: -10px 0px -10px 0px;
+  width: 100%;
+}
+
+.transaction .transaction-info .inputs-table .inputs-tr,
+.transaction .transaction-info .outputs-table .outputs-tr
+{
+  display: table-row;
+}
+
+.transaction .transaction-info .inputs-table .inputs-td,
+.transaction .transaction-info .outputs-table .outputs-td
+{
+  display: table-cell;
+  padding: 10px 10px 10px 10px;
+}
+
+.transaction .transaction-info .inputs-table .inputs-tr--main .inputs-td,
+.transaction .transaction-info .outputs-table .outputs-tr--main .outputs-td
+{
+  background-color: #eeeeee;
+  color: #222244;
+  font-weight: bold;
+}
+
+.transaction .transaction-info .inputs-table .inputs-tr--main .inputs-td:last-child,
+.transaction .transaction-info .outputs-table .outputs-tr--main .outputs-td:last-child
+{
+  background-color: #e2e2e2;
+}
+
+.transaction .transaction-info .inputs-table .inputs-tr--values .inputs-td:last-child
+{
+  background-color: #ff4444;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.transaction .transaction-info .outputs-table .outputs-tr--values .outputs-td:last-child
+{
+  background-color: #44cc44;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.transaction .transaction-info .inputs-table .inputs-tr:last-child .inputs-td:first-child
+{
+  border-bottom-left-radius: 10px;
+}
+
+.transaction .transaction-info .outputs-table .outputs-tr:last-child .outputs-td:last-child
+{
+  border-bottom-right-radius: 10px;
 }
 
 .summary .last-blocks .blocks-footer,
