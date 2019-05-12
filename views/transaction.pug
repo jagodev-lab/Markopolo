@@ -2,11 +2,13 @@ doctype html
 html
   head
     include includes/head.pug
+    |
+    script(src='/scripts/transaction.js')
   body
     include includes/header.pug
     |
     div(class='body')
-      div(class='transactions')
+      div(class='transaction')
         div(class='coin-info')
           div(class='preview')
             img(src='/images/coin.png')
@@ -24,8 +26,32 @@ html
             div(class='website')
               div(class='title') vDinar's official website
               div(class='url') https://www.vdinar.info
-        div(class='transaction')
+        div(class='transaction-info')
           div(class='container')
             div(class='content')
+              div(class='transaction-main')
+                div(class='transaction-tr transaction-tr--main')
+                  div(class='transaction-td')= 'Transaction'
+                  div(class='transaction-td')= 'Value'
+                div(class='transaction-tr transaction-tr--values')
+                  div(class='transaction-td' id='transactionId')= transaction
+                  div(class='transaction-td')
+                    span(class='value' id='transactionValue')
+                    span(class='currency')= ' VDN'
+              div(class='transaction-summary')
+                div(class='transaction-tr transaction-tr--main')
+                  div(class='transaction-td')= 'Inputs'
+                  div(class='transaction-td')= 'Outputs'
+                div(class='transaction-tr transaction-tr--values')
+                  div(class='transaction-td')
+                    div(class='inputs-table' id='transactionInputs')
+                      div(class='inputs-tr inputs-tr--main')
+                        div(class='inputs-td')= 'Source'
+                        div(class='inputs-td')= 'Amount'
+                  div(class='transaction-td')
+                    div(class='outputs-table' id='transactionOutputs')
+                      div(class='outputs-tr outputs-tr--main')
+                        div(class='outputs-td')= 'Recipient'
+                        div(class='outputs-td')= 'Amount'
     |
     include includes/footer.pug

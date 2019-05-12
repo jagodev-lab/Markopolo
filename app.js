@@ -310,7 +310,7 @@ app.get('/transaction/:txid', function (req, res) {
         )
       })
     } else {
-      res.render('transaction', { title: 'Markopolo explorer' })
+      res.render('transaction', { title: 'Markopolo explorer', transaction: id })
     }
   }
 })
