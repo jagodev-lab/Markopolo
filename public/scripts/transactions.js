@@ -61,11 +61,15 @@ function updateTransactions()
     {
       const result = JSON.parse(this.responseText);
 
+      var date = "";
       for(var i = 0; i < result.length; i++)
       {
+        date = new Date(result[i].timestamp * 1000);
+        date = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+
         document.getElementById("transactionIndex" + (i + 1)).innerHTML = result[i]._id;
         document.getElementById("transactionHash" + (i + 1)).innerHTML = result[i].transaction;
-        document.getElementById("transactionTime" + (i + 1)).innerHTML = result[i].timestamp;
+        document.getElementById("transactionTime" + (i + 1)).innerHTML = date;
       }
     }
   };
