@@ -234,6 +234,54 @@ app.get('/api/getsupply', function (req, res) {
   })
 })
 
+app.get('/api/gettransaction', function (req, res) {
+  const id = req.query.id
+  const idReg = new RegExp('^([a-zA-Z0-9]{64})$')
+  const numericIdReg = new RegExp('^([0-9]+)$')
+
+  if (idReg.test(id)) {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+      if (err) {
+        throw err
+      }
+      var dbo = db.db("markopolo")
+
+      dbo.collection("transactions").findOne(
+        { transaction: id },
+        function(err, result) {
+          if (err) {
+            throw err
+          }
+
+          res.json(result)
+          db.close()
+        }
+      )
+    })
+  } else if (numericIdReg.test(id)) {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+      if (err) {
+        throw err
+      }
+      var dbo = db.db("markopolo")
+
+      dbo.collection("transactions").findOne(
+        { _id: parseInt(id) },
+        function(err, result) {
+          if (err) {
+            throw err
+          }
+
+          res.json(result)
+          db.close()
+        }
+      )
+    })
+  } else {
+    res.json({ error: true, message: 'Transaction id neither corresponds to an id nor is numeric.' })
+  }
+})
+
 app.get('/transaction/:txid', function (req, res) {
   const id = req.params.txid
   const idReg = new RegExp('^([a-zA-Z0-9]{64})$')
