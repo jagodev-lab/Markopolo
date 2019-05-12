@@ -66,13 +66,18 @@ function updateTransactions()
       const result = JSON.parse(this.responseText);
 
       var date = "";
+      var id = "";
+      var transaction = "";
       for(var i = 0; i < result.length; i++)
       {
         date = new Date(result[i].timestamp * 1000);
         date = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 
-        document.getElementById("transactionIndex" + (i + 1)).innerHTML = result[i]._id;
-        document.getElementById("transactionHash" + (i + 1)).innerHTML = result[i].transaction;
+        id = result[i]._id;
+        transaction = result[i].transaction;
+
+        document.getElementById("transactionIndex" + (i + 1)).innerHTML = "<a href='/transaction/" + id + "'>" + id + "</a>";
+        document.getElementById("transactionHash" + (i + 1)).innerHTML = "<a href='/transaction/" + transaction + "'>" + transaction + "</a>";
         document.getElementById("transactionTime" + (i + 1)).innerHTML = date;
       }
     }
