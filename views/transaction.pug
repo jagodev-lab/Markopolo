@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    include includes/head.pug
+  body
+    include includes/header.pug
+    |
+    div(class='body')
+      div(class='transactions')
+        div(class='coin-info')
+          div(class='preview')
+            img(src='/images/coin.png')
+          div(class='info-table')
+            div(class='info-tr')
+              div(class='name') Net hashrate (MH/s)
+              div(class='value', id='coinInfoHashrate') -
+            div(class='info-tr')
+              div(class='name') Difficulty
+              div(class='value', id='coinInfoDifficulty') -
+            div(class='info-tr')
+              div(class='name') Supply
+              div(class='value', id='coinInfoSupply') -
+          a(href='https://www.vdinar.info', target='_blank')
+            div(class='website')
+              div(class='title') vDinar's official website
+              div(class='url') https://www.vdinar.info
+        div(class='transaction')
+          div(class='container')
+            div(class='content')
+    |
+    include includes/footer.pug
