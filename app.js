@@ -17,7 +17,7 @@ app.get('/', function (req, res) {
   res.render('homepage', { title: 'Markopolo explorer' })
 })
 
-app.get('/api/getblock', function (req, res) {
+app.get('/api/v1.0/getblock', function (req, res) {
   if (typeof req.query.hash != 'undefined') {
     const hash = req.query.hash
     const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
@@ -55,7 +55,7 @@ app.get('/api/getblock', function (req, res) {
   }
 })
 
-app.get('/api/getblockbyhash', function (req, res) {
+app.get('/api/v1.0/getblockbyhash', function (req, res) {
   if (typeof req.query.hash != 'undefined') {
     const hash = req.query.hash
     const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
@@ -73,7 +73,7 @@ app.get('/api/getblockbyhash', function (req, res) {
   }
 })
 
-app.get('/api/getblockbyindex', function (req, res) {
+app.get('/api/v1.0/getblockbyindex', function (req, res) {
   if (typeof req.query.index != 'undefined') {
     const index = parseInt(req.query.index)
 
@@ -99,11 +99,11 @@ app.get('/api/getblockbyindex', function (req, res) {
   }
 })
 
-app.get('/api/getblockchaininfo', function (req, res) {
+app.get('/api/v1.0/getblockchaininfo', function (req, res) {
   client.getBlockchainInfo().then((result) => res.json(result))
 })
 
-app.get('/api/getblockhash', function (req, res) {
+app.get('/api/v1.0/getblockhash', function (req, res) {
   if (typeof req.query.index != 'undefined') {
     const index = parseInt(req.query.index)
 
@@ -127,7 +127,7 @@ app.get('/api/getblockhash', function (req, res) {
   }
 })
 
-app.get('/api/getlastblocks', function (req, res) {
+app.get('/api/v1.0/getlastblocks', function (req, res) {
   var offset = 0;
 
   if (typeof req.query.page != 'undefined') {
@@ -167,7 +167,7 @@ app.get('/api/getlastblocks', function (req, res) {
   })
 })
 
-app.get('/api/getlasttransactions', function (req, res) {
+app.get('/api/v1.0/getlasttransactions', function (req, res) {
   var offset = 0;
 
   if (typeof req.query.page != 'undefined') {
@@ -191,11 +191,11 @@ app.get('/api/getlasttransactions', function (req, res) {
   });
 })
 
-app.get('/api/getmininginfo', function (req, res) {
+app.get('/api/v1.0/getmininginfo', function (req, res) {
   client.getMiningInfo().then((result) => res.json(result))
 })
 
-app.get('/api/getrawtransaction', function (req, res) {
+app.get('/api/v1.0/getrawtransaction', function (req, res) {
   if (typeof req.query.id != 'undefined') {
     const id = req.query.id
     const idReg = new RegExp('^([a-zA-Z0-9]{64})$')
@@ -213,7 +213,7 @@ app.get('/api/getrawtransaction', function (req, res) {
   }
 })
 
-app.get('/api/getsupply', function (req, res) {
+app.get('/api/v1.0/getsupply', function (req, res) {
   MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
     if (err) {
       throw err
@@ -234,7 +234,7 @@ app.get('/api/getsupply', function (req, res) {
   })
 })
 
-app.get('/api/gettransaction', function (req, res) {
+app.get('/api/v1.0/gettransaction', function (req, res) {
   const id = req.query.id
   const idReg = new RegExp('^([a-zA-Z0-9]{64})$')
   const numericIdReg = new RegExp('^([0-9]+)$')
