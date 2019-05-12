@@ -33,12 +33,12 @@ function updateCoinInfo()
         }
       }
 
-      xhttp.open("GET", "/api/getsupply", true);
+      xhttp.open("GET", "/api/v1.0/getsupply", true);
       xhttp.send();
     }
   };
 
-  xhttp.open("GET", "/api/getmininginfo", true);
+  xhttp.open("GET", "/api/v1.0/getmininginfo", true);
   xhttp.send();
 }
 
@@ -70,7 +70,7 @@ function updateBlocks()
     }
   };
 
-  xhttp.open("GET", "/api/getlastblocks?page=" + page, true);
+  xhttp.open("GET", "/api/v1.0/getlastblocks?page=" + page, true);
   xhttp.send();
 }
 
