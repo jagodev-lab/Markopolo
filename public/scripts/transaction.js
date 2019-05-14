@@ -77,7 +77,7 @@ function getTransaction()
                 " + (inputs[i].coinbase ? "Coinbase" : inputs[i].sender) + "\
               </div>\
               <div class='inputs-td'>\
-                " + inputs[i].value + "\
+                " + inputs[i].value + " VDN\
               </div>\
             </div>\
           ";
@@ -91,7 +91,7 @@ function getTransaction()
                 " + outputs[i].recipient + "\
               </div>\
               <div class='outputs-td'>\
-                " + outputs[i].value + "\
+                " + outputs[i].value + " VDN\
               </div>\
             </div>\
           ";
