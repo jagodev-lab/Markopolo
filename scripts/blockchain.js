@@ -227,7 +227,7 @@ async function readBlockchain(hash) {
           }
 
           // Update transaction's total value
-          for (var j = 0; j < newTransactions[i].inputs.length; j++) {
+          for (var j = 0; j < newTransactions[baseId + i].inputs.length; j++) {
             newTransactions[baseId + i].value += newTransactions[baseId + i].inputs[j].value;
           }
 
