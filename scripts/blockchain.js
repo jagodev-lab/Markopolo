@@ -5,10 +5,13 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoUrl = "mongodb://localhost:27017/";
 
 const transactionsPerRound = 500;
+const requiredConfirmations = 6;
 
 var supply = 0;
 var unconfirmedSupply = 0;
 var transactions = [];
+var transactionsCount = 0;
+var unconfirmedTransactionsCount = 0;
 // Declaring donations address as first address
 var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
 
@@ -38,50 +41,38 @@ async function initReading() {
 
             if (res) {
               supply = res.supply;
+              transactionsCount = res.transactionsCount;
 
               const block = await client.getBlock(res.lastHash);
               var hash = block.nextblockhash;
 
-              // Load confirmed transactions
-              dbo.collection("transactions").find().toArray(
+              // Load addresses
+              dbo.collection("addresses").find().toArray(
                 function(err, res) {
                   if (err) {
                     throw err;
                   }
 
-                  transactions = res.filter(function(transaction) {
-                      return transaction.confirmed;
-                    });
+                  addresses = res;
 
-                  // Load addresses
-                  dbo.collection("addresses").find().toArray(
+                  // Delete current "addresses" collection
+                  dbo.collection("addresses").drop(
                     function(err, res) {
                       if (err) {
                         throw err;
                       }
 
-                      addresses = res;
-
-                      // Delete current "transactions" collection
-                      dbo.collection("transactions").drop(
+                      dbo.collection("transactions").deleteMany(
+                        { confirmed: false },
                         function(err, res) {
                           if (err) {
                             throw err;
                           }
 
-                          // Delete current "addresses" collection
-                          dbo.collection("addresses").drop(
-                            function(err, res) {
-                              if (err) {
-                                throw err;
-                              }
+                          db.close();
 
-                              db.close();
-
-                              // Start the reading process
-                              readBlockchain(hash);
-                            }
-                          );
+                          // Start the reading process
+                          readBlockchain(hash);
                         }
                       );
                     }
@@ -91,6 +82,8 @@ async function initReading() {
             } else {
               // Jumping genesis block as its outputs are not spendable
               var hash = await client.getBlockHash(1);
+
+              db.close();
 
               readBlockchain(hash);
             }
@@ -108,8 +101,7 @@ async function readBlockchain(hash) {
   if (hash == null) {
     hash = res.lastHash;
   }
-  // 6 blocks required to confirm
-  const lastConfirmedHash = await client.getBlockHash(lastHeight - 7);
+  const lastConfirmedHash = await client.getBlockHash(lastHeight - requiredConfirmations);
 
   // Cyan background color
   console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain reading started!");
@@ -122,12 +114,11 @@ async function readBlockchain(hash) {
     while (newTransactions.length < transactionsPerRound && hash != lastHash) {
       var block = await client.getBlock(hash);
 
-      var confirmed = block.height <= lastHeight - 6;
+      var confirmed = block.height < lastHeight - requiredConfirmations;
       var baseId = newTransactions.length;
-      var totalBaseId = transactions.length + baseId;
       for (var i = 0; i < block.tx.length; i++) {
         newTransactions.push({
-          _id: totalBaseId + i,
+          _id: transactionsCount + unconfirmedTransactionsCount + i,
           transaction: block.tx[i],
           block: hash,
           confirmed: confirmed,
@@ -151,6 +142,7 @@ async function readBlockchain(hash) {
       // increase speed and avoid
       // several if statements
       if (confirmed) {
+        transactionsCount += block.tx.length;
         // Coinbase transaction 0
         encodedTransaction = await client.getRawTransaction(block.tx[0]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
@@ -256,6 +248,7 @@ async function readBlockchain(hash) {
           supply += localSupply;
         }
       } else {
+        unconfirmedTransactionsCount += block.tx.length;
         // Coinbase transaction 0
         encodedTransaction = await client.getRawTransaction(block.tx[0]);
         transaction = await client.decodeRawTransaction(encodedTransaction);
@@ -332,7 +325,7 @@ async function readBlockchain(hash) {
           }
 
           // Update transaction's total value
-          for (var j = 0; j < newTransactions[i].inputs.length; j++) {
+          for (var j = 0; j < newTransactions[baseId + i].inputs.length; j++) {
             newTransactions[baseId + i].value += newTransactions[baseId + i].inputs[j].value;
           }
 
@@ -370,13 +363,13 @@ async function readBlockchain(hash) {
     // Cyan background color
     console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " round completed!");
     // White background color, black font color
-    console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + transactions.length + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
+    console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
   }
 
   // Cyan background color
   console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain loaded!");
   // White background color, black font color
-  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + transactions.length + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
+  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 
   // Connect to database
   MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
@@ -388,7 +381,13 @@ async function readBlockchain(hash) {
     // Update supplies in collection "info"
     dbo.collection("info").updateOne(
       { _id: 0},
-      { $set: { supply: supply, unconfirmedSupply: unconfirmedSupply, lastHash: lastConfirmedHash } },
+      { $set: {
+        supply: supply,
+        unconfirmedSupply: unconfirmedSupply,
+        lastHash: lastConfirmedHash,
+        transactionsCount: transactionsCount,
+        unconfirmedTransactionsCount: unconfirmedTransactionsCount
+      } },
       { upsert: true },
       function(err, res) {
         if (err) {
@@ -398,51 +397,31 @@ async function readBlockchain(hash) {
         // Cyan background color
         console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " info updated succesfully!");
 
-        // Remove all content from collection "addresses"
-        dbo.collection("addresses").deleteMany(
-          {},
+        // Insert addresses in collection "addresses"
+        dbo.collection("addresses").insertMany(
+          addresses,
           function(err, res) {
             if (err) {
               throw err;
             }
 
-            // Insert addresses in collection "addresses"
-            dbo.collection("addresses").insertMany(
-              addresses,
+            // Cyan background color
+            console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " addresses updated succesfully!");
+
+            // Insert transactions in collection "transactions"
+            dbo.collection("transactions").insertMany(
+              transactions,
               function(err, res) {
                 if (err) {
                   throw err;
                 }
 
                 // Cyan background color
-                console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " addresses updated succesfully!");
+                console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions updated succesfully!");
+                // Green background color
+                console.log("\x1b[42m%s\x1b[0m%s", "SUCCESS:", " blockchain reading completed!");
 
-                // Remove all content from collection "transactions"
-                dbo.collection("transactions").deleteMany(
-                  {},
-                  function(err, res) {
-                    if (err) {
-                      throw err;
-                    }
-
-                    // Insert transactions in collection "transactions"
-                    dbo.collection("transactions").insertMany(
-                      transactions,
-                      function(err, res) {
-                        if (err) {
-                          throw err;
-                        }
-
-                        // Cyan background color
-                        console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions updated succesfully!");
-                        // Green background color
-                        console.log("\x1b[42m%s\x1b[0m%s", "SUCCESS:", " blockchain reading completed!");
-
-                        db.close();
-                      }
-                    );
-                  }
-                );
+                db.close();
               }
             );
           }
