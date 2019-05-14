@@ -6,17 +6,110 @@ const mongoUrl = "mongodb://localhost:27017/";
 
 const transactionsPerRound = 500;
 
-async function readBlockchain() {
-  // Jumping genesis block as its outputs are not spendable
-  var hash = await client.getBlockHash(1);
+var supply = 0;
+var unconfirmedSupply = 0;
+var transactions = [];
+// Declaring donations address as first address
+var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
+
+async function initReading() {
+  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+    if (err) {
+      throw err;
+    }
+    var dbo = db.db("markopolo");
+
+    // Set unconfirmed values to 0
+    dbo.collection("addresses").updateMany(
+      { $or: [{ unconfirmedReceived: { $gt: 0 } }, { unconfirmedSpent: { $gt: 0 } }] },
+      { $set: { unconfirmedReceived: 0, unconfirmedSpent: 0 } },
+      function(err, res) {
+        if (err) {
+          throw err;
+        }
+
+        // Check whether collection "info" exists
+        dbo.collection("info").findOne(
+          { _id: 0},
+          async function(err, res) {
+            if (err) {
+              throw err;
+            }
+
+            if (res) {
+              supply = res.supply;
+
+              const block = await client.getBlock(res.lastHash);
+              var hash = block.nextblockhash;
+
+              // Load confirmed transactions
+              dbo.collection("transactions").find().toArray(
+                function(err, res) {
+                  if (err) {
+                    throw err;
+                  }
+
+                  transactions = res.filter(function(transaction) {
+                      return transaction.confirmed;
+                    });
+
+                  // Load addresses
+                  dbo.collection("addresses").find().toArray(
+                    function(err, res) {
+                      if (err) {
+                        throw err;
+                      }
+
+                      addresses = res;
+
+                      // Delete current "transactions" collection
+                      dbo.collection("transactions").drop(
+                        function(err, res) {
+                          if (err) {
+                            throw err;
+                          }
+
+                          // Delete current "addresses" collection
+                          dbo.collection("addresses").drop(
+                            function(err, res) {
+                              if (err) {
+                                throw err;
+                              }
+
+                              db.close();
+
+                              // Start the reading process
+                              readBlockchain(hash);
+                            }
+                          );
+                        }
+                      );
+                    }
+                  );
+                }
+              );
+            } else {
+              // Jumping genesis block as its outputs are not spendable
+              var hash = await client.getBlockHash(1);
+
+              readBlockchain(hash);
+            }
+          }
+        );
+      }
+    );
+  });
+}
+
+async function readBlockchain(hash) {
   const blockchainInfo = await client.getBlockchainInfo();
   const lastHeight = blockchainInfo.blocks - 1;
   const lastHash = await client.getBlockHash(lastHeight);
-  var supply = 0;
-  var unconfirmedSupply = 0;
-  var transactions = [];
-  // Declaring donations address as first address
-  var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
+  if (hash == null) {
+    hash = res.lastHash;
+  }
+  // 6 blocks required to confirm
+  const lastConfirmedHash = await client.getBlockHash(lastHeight - 7);
 
   // Cyan background color
   console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain reading started!");
@@ -295,7 +388,7 @@ async function readBlockchain() {
     // Update supplies in collection "info"
     dbo.collection("info").updateOne(
       { _id: 0},
-      { $set: { supply: supply, unconfirmedSupply: unconfirmedSupply } },
+      { $set: { supply: supply, unconfirmedSupply: unconfirmedSupply, lastHash: lastConfirmedHash } },
       { upsert: true },
       function(err, res) {
         if (err) {
@@ -359,4 +452,4 @@ async function readBlockchain() {
   });
 }
 
-readBlockchain();
+initReading();
