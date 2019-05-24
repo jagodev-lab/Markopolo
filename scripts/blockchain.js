@@ -4,6 +4,7 @@ const client = new Client({ username: 'testuser', password: 'testpassword', port
 const MongoClient = require('mongodb').MongoClient;
 const mongoUrl = "mongodb://localhost:27017/";
 
+const blocksPerUpdate = 500;
 const transactionsPerRound = 500;
 const requiredConfirmations = 6;
 
@@ -15,98 +16,120 @@ var unconfirmedTransactionsCount = 0;
 // Declaring donations address as first address
 var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
 async function initReading() {
+  // Reset values to allow multiple reads
+  transactions = [];
+  addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
+
   MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
     if (err) {
       throw err;
     }
     var dbo = db.db("markopolo");
 
-    // Set unconfirmed values to 0
-    dbo.collection("addresses").updateMany(
-      { $or: [{ unconfirmedReceived: { $gt: 0 } }, { unconfirmedSpent: { $gt: 0 } }] },
-      { $set: { unconfirmedReceived: 0, unconfirmedSpent: 0 } },
-      function(err, res) {
+    // Check whether collection "info" exists
+    dbo.collection("info").findOne(
+      { _id: 0},
+      async function(err, res) {
         if (err) {
           throw err;
         }
 
-        // Check whether collection "info" exists
-        dbo.collection("info").findOne(
-          { _id: 0},
-          async function(err, res) {
+        await dbo.collection("info").updateOne(
+          { _id: 0 },
+          { $set: {
+            updating: true
+          } },
+          { upsert: true },
+          function(err, res) {
             if (err) {
               throw err;
             }
+          }
+        );
 
-            if (res) {
-              supply = res.supply;
-              transactionsCount = res.transactionsCount;
+        if (res) {
+          if (res.updating) {
+            var updating = true;
+            while (updating) {
+              // Red background color
+              console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " blockchain is being updated by another instance! Trying again in 30 seconds...");
+              // Wait 30 seconds
+              await delay(30000);
+              await dbo.collection("info").findOne(
+                { _id: 0 },
+                function(err, newRes) {
+                  if (err) {
+                    throw err;
+                  }
 
-              const hash = res.lastHash;
+                  updating = newRes.updating;
+                }
+              );
+            }
+          }
 
-              // Load addresses
-              dbo.collection("addresses").find().toArray(
+          supply = res.supply;
+          transactionsCount = res.transactionsCount;
+
+          const hash = res.lastHash;
+
+          // Set unconfirmed values to 0
+          dbo.collection("addresses").updateMany(
+            { $or: [{ unconfirmedReceived: { $gt: 0 } }, { unconfirmedSpent: { $gt: 0 } }] },
+            { $set: { unconfirmedReceived: 0, unconfirmedSpent: 0 } },
+            function(err, res) {
+              if (err) {
+                throw err;
+              }
+
+              // Delete stored unconfirmed transactions
+              dbo.collection("transactions").deleteMany(
+                { confirmed: false },
                 function(err, res) {
                   if (err) {
                     throw err;
                   }
 
-                  addresses = res;
+                  db.close();
 
-                  // Delete current "addresses" collection
-                  dbo.collection("addresses").drop(
-                    function(err, res) {
-                      if (err) {
-                        throw err;
-                      }
-
-                      dbo.collection("transactions").deleteMany(
-                        { confirmed: false },
-                        function(err, res) {
-                          if (err) {
-                            throw err;
-                          }
-
-                          db.close();
-
-                          // Start the reading process
-                          readBlockchain(hash);
-                        }
-                      );
-                    }
-                  );
+                  // Start the reading process
+                  readBlockchain(hash);
                 }
               );
-            } else {
-              // Jumping genesis block as its outputs are not spendable
-              var hash = await client.getBlockHash(1);
-
-              db.close();
-
-              readBlockchain(hash);
             }
-          }
-        );
+          );
+        } else {
+          // Jumping genesis block as its outputs are not spendable
+          var hash = await client.getBlockHash(1);
+
+          db.close();
+
+          // Start the reading process
+          readBlockchain(hash);
+        }
       }
     );
   });
 }
 
 async function readBlockchain(hash) {
+  var blockchainCompleted = false;
   const blockchainInfo = await client.getBlockchainInfo();
-  const lastHeight = blockchainInfo.blocks - 1;
-  const lastHash = await client.getBlockHash(lastHeight);
-  if (hash == null) {
-    hash = res.lastHash;
+  const lastHeight = Math.min((await client.getBlock(hash)).height + blocksPerUpdate, blockchainInfo.blocks);
+  if (lastHeight == blockchainInfo.blocks) {
+    blockchainCompleted = true;
   }
+  const lastHash = await client.getBlockHash(lastHeight);
   const lastConfirmedHash = await client.getBlockHash(lastHeight - requiredConfirmations);
 
   // Cyan background color
-  console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain reading started!");
+  console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blocks round started!");
   // White background color, black font color
-  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " last block's index is " + lastHeight + ".");
-  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " last block's hash is " + lastHash + ".");
+  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " blocks round's last block's index is " + lastHeight + ".");
+  console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " blocks round's last block's hash is " + lastHash + ".");
 
   while (hash != lastHash) {
     var newTransactions = [];
@@ -206,7 +229,12 @@ async function readBlockchain(hash) {
             // Update address
             address = input.scriptPubKey.addresses[0];
             addressId = addresses.findIndex(x => x.address === address);
-            addresses[addressId].spent += input.value;
+            if (addressId == -1) {
+              // Exists in collection but is not stored in array
+              addresses.push({ address: address, received: 0, spent: input.value, unconfirmedReceived: 0, unconfirmedSpent: 0 });
+            } else {
+              addresses[addressId].spent += input.value;
+            }
             // Update transactions
             newTransactions[baseId + i].inputs.push({
               coinbase: false,
@@ -312,7 +340,12 @@ async function readBlockchain(hash) {
             // Update address
             address = input.scriptPubKey.addresses[0];
             addressId = addresses.findIndex(x => x.address === address);
-            addresses[addressId].unconfirmedSpent += input.value;
+            if (addressId == -1) {
+              // Exists in collection but is not stored in array
+              addresses.push({ address: address, received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: input.value });
+            } else {
+              addresses[addressId].unconfirmedSpent += input.value;
+            }
             // Update transactions
             newTransactions[baseId + i].inputs.push({
               coinbase: false,
@@ -360,13 +393,13 @@ async function readBlockchain(hash) {
     transactions = transactions.concat(newTransactions);
 
     // Cyan background color
-    console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " round completed!");
+    console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions round completed!");
     // White background color, black font color
     console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
   }
 
   // Cyan background color
-  console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blockchain loaded!");
+  console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blocks round loaded!");
   // White background color, black font color
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 
@@ -396,9 +429,23 @@ async function readBlockchain(hash) {
         // Cyan background color
         console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " info updated succesfully!");
 
-        // Insert addresses in collection "addresses"
-        dbo.collection("addresses").insertMany(
-          addresses,
+        var addressesBulk = dbo.collection("addresses").initializeUnorderedBulkOp();
+
+        for (var i = 0; i < addresses.length; i++) {
+          addressesBulk.find({ address: addresses[i].address }).upsert().updateOne({
+            $set: {
+              address: addresses[i].address
+            },
+            $inc: {
+              received: addresses[i].received,
+              spent: addresses[i].spent,
+              unconfirmedReceived: addresses[i].unconfirmedReceived,
+              unconfirmedSpent: addresses[i].unconfirmedSpent
+            }
+          });
+        }
+
+        addressesBulk.execute(
           function(err, res) {
             if (err) {
               throw err;
@@ -417,10 +464,34 @@ async function readBlockchain(hash) {
 
                 // Cyan background color
                 console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions updated succesfully!");
-                // Green background color
-                console.log("\x1b[42m%s\x1b[0m%s", "SUCCESS:", " blockchain reading completed!");
 
-                db.close();
+                // Update supplies in collection "info"
+                dbo.collection("info").updateOne(
+                  { _id: 0},
+                  { $set: {
+                    updating: false
+                  } },
+                  { upsert: true },
+                  function(err, res) {
+                    if (err) {
+                      throw err;
+                    }
+
+                    // Cyan background color
+                    console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " status updated succesfully!");
+
+                    db.close();
+
+                    if (blockchainCompleted) {
+                      // Green background color
+                      console.log("\x1b[42m%s\x1b[0m%s", "SUCCESS:", " blockchain reading completed!");
+                    } else {
+                      initReading();
+                      // Cyan background color
+                      console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blocks round completed!");
+                    }
+                  }
+                );
               }
             );
           }
