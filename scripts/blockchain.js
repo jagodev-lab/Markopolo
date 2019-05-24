@@ -43,8 +43,7 @@ async function initReading() {
               supply = res.supply;
               transactionsCount = res.transactionsCount;
 
-              const block = await client.getBlock(res.lastHash);
-              var hash = block.nextblockhash;
+              const hash = res.lastHash;
 
               // Load addresses
               dbo.collection("addresses").find().toArray(
