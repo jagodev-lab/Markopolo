@@ -17,31 +17,47 @@ MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
   dbo.collection("info").drop(
     function(err, res) {
       if (err) {
-        throw err;
+        if (err.code === 26) {
+          // Red background color
+          console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " collection \"info\" didn't exist!");
+        } else {
+          throw err;
+        }
+      } else {
+        // Cyan background color
+        console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " collection \"info\" dropped!");
       }
-
-      // Cyan background color
-      console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " \"info\" collection dropped!");
 
       // Delete current "addresses" collection
       dbo.collection("addresses").drop(
         function(err, res) {
           if (err) {
-            throw err;
+            if (err.code === 26) {
+              // Red background color
+              console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " collection \"addresses\" didn't exist!");
+            } else {
+              throw err;
+            }
+          } else {
+            // Cyan background color
+            console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " collection \"addresses\" dropped!");
           }
-
-          // Cyan background color
-          console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " \"addresses\" collection dropped!");
 
           // Delete current "transactions" collection
           dbo.collection("transactions").drop(
             function(err, res) {
               if (err) {
-                throw err;
+                if (err.code === 26) {
+                  // Red background color
+                  console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " collection \"transactions\" didn't exist!");
+                } else {
+                  throw err;
+                }
+              } else {
+                // Cyan background color
+                console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " collection \"transactions\" dropped!");
               }
 
-              // Cyan background color
-              console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " \"transactions\" collection dropped!");
               // Green background color
               console.log("\x1b[42m%s\x1b[0m%s", "SUCCESS:", " blockchain cleaning completed!");
 
