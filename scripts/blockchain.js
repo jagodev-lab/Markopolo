@@ -22,6 +22,8 @@ async function initReading() {
   // Reset values to allow multiple reads
   transactions = [];
   addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
+  unconfirmedTransactionsCount = 0;
+  unconfirmedSupply = 0;
 
   MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
     if (err) {
