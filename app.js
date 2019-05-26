@@ -378,6 +378,77 @@ app.get('/api/v1.0/gettransaction', function (req, res) {
   }
 })
 
+app.get('/api/v1.0/search', function (req, res) {
+  const string = req.query.string
+  const idReg = new RegExp('^([0-9]+)$')
+  const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
+  const addressReg = new RegExp('^([a-zA-Z0-9]{34})$')
+
+  if (idReg.test(string)) {
+    const index = parseInt(string);
+
+    client.getBlockchainInfo().then(info => {
+      if (info.blocks >= index) {
+        res.redirect('/block/' + index)
+      } else {
+        res.json({ error: true, message: 'Block index is greater than blockchain height.' })
+      }
+    })
+  } else if (hashReg.test(string)) {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+      if (err) {
+        throw err
+      }
+      var dbo = db.db("markopolo")
+
+      dbo.collection("transactions").findOne(
+        { transaction: string },
+        function(err, result) {
+          if (err) {
+            throw err
+          }
+
+          if (result) {
+            res.json({ url: '/transaction/' + string })
+          } else {
+            client.getBlock(string).then(block => {
+              res.json({ url: '/block/' + string })
+            }).catch(error => {
+              res.json({ error: true, message: 'Provided string does not correspond to any block hash or stored transaction.' })
+            })
+          }
+        }
+      )
+    })
+  } else if (addressReg.test(string)) {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+      if (err) {
+        throw err
+      }
+      var dbo = db.db("markopolo")
+
+      dbo.collection("addresses").findOne(
+        { address: string },
+        function(err, result) {
+          if (err) {
+            throw err
+          }
+
+          if (result) {
+            res.json({ url: '/address/' + string })
+          }
+          else {
+            res.json({ error: true, message: 'Provided address does not correspond to any stored address.' })
+          }
+          db.close()
+        }
+      )
+    })
+  } else {
+    res.json({ error: true, message: 'String does not correspond to any existing format.' })
+  }
+})
+
 app.get('/block/:block', function (req, res) {
   const block = req.params.block
   const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
