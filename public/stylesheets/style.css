@@ -402,6 +402,31 @@ a:hover, a:active, a:focus
   padding: 10px 0px 10px 0px;
 }
 
+.summary .last-blocks .blocks-tr--values .blocks-td a:active,
+.summary .last-blocks .blocks-tr--values .blocks-td a:hover,
+.summary .last-blocks .blocks-tr--values .blocks-td a:link,
+.summary .last-blocks .blocks-tr--values .blocks-td a:visited,
+.transactions .last-transactions .transactions-tr--values .transactions-td a:active,
+.transactions .last-transactions .transactions-tr--values .transactions-td a:hover,
+.transactions .last-transactions .transactions-tr--values .transactions-td a:link,
+.transactions .last-transactions .transactions-tr--values .transactions-td a:visited,
+.transaction .transaction-info .transaction-tr--values .transaction-td a:active,
+.transaction .transaction-info .transaction-tr--values .transaction-td a:hover,
+.transaction .transaction-info .transaction-tr--values .transaction-td a:link,
+.transaction .transaction-info .transaction-tr--values .transaction-td a:visited,
+.address .address-info .address-tr--values .address-td a:active,
+.address .address-info .address-tr--values .address-td a:hover,
+.address .address-info .address-tr--values .address-td a:link,
+.address .address-info .address-tr--values .address-td a:visited,
+.block .block-info .block-tr--values .block-td a:active,
+.block .block-info .block-tr--values .block-td a:hover,
+.block .block-info .block-tr--values .block-td a:link,
+.block .block-info .block-tr--values .block-td a:visited
+{
+  color: #0000ee;
+  text-decoration: none;
+}
+
 .address .address-info .address-main .address-td:last-child
 {
   border: none;
