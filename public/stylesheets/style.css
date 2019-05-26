@@ -250,7 +250,10 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .search-bar input[type=text],
-.transactions .last-transactions .search-bar input[type=text]
+.transactions .last-transactions .search-bar input[type=text],
+.transaction .transaction-info .search-bar input[type=text],
+.address .address-info .search-bar input[type=text],
+.block .block-info .search-bar input[type=text]
 {
   border-bottom: 2px solid #eeeeee;
   border-left: 2px solid #cccccc;
@@ -267,7 +270,10 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .search-bar input[type=submit],
-.transactions .last-transactions .search-bar input[type=submit]
+.transactions .last-transactions .search-bar input[type=submit],
+.transaction .transaction-info .search-bar input[type=submit],
+.address .address-info .search-bar input[type=submit],
+.block .block-info .search-bar input[type=submit]
 {
   background-color: #00cc00;
   border-bottom: 2px solid #009900;
@@ -288,7 +294,10 @@ a:hover, a:active, a:focus
 }
 
 .summary .last-blocks .search-bar input[type=submit]:hover,
-.transactions .last-transactions .search-bar input[type=submit]:hover
+.transactions .last-transactions .search-bar input[type=submit]:hover,
+.transaction .transaction-info .search-bar input[type=submit]:hover,
+.address .address-info .search-bar input[type=submit]:hover,
+.block .block-info .search-bar input[type=submit]:hover
 {
   background-color: #00ee00;
   cursor: pointer;

@@ -3,6 +3,7 @@ html
   head
     include includes/head.pug
     |
+    script(src='/scripts/search.js')
     script(src='/scripts/summary.js')
   body
     include includes/header.pug
@@ -30,8 +31,9 @@ html
           div(class='container')
             div(class='content')
               div(class='search-bar')
-                input(type='text', placeholder='Search for block indexes, hashes, transactions or addresses...')
-                input(type='submit', value='Search')
+                form(onsubmit='search(); return false;')
+                  input(id='searchText', placeholder='Search for block indexes, block hashes, transactions or addresses...', type='text')
+                  input(type='submit', value='Search')
               div(class='blocks-table')
                 div(class='blocks-tr blocks-tr--main')
                   div(class='blocks-td') Block index

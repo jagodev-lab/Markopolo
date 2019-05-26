@@ -3,6 +3,7 @@ html
   head
     include includes/head.pug
     |
+    script(src='/scripts/search.js')
     script(src='/scripts/transaction.js')
   body
     include includes/header.pug
@@ -29,6 +30,10 @@ html
         div(class='transaction-info')
           div(class='container')
             div(class='content')
+              div(class='search-bar')
+                form(onsubmit='search(); return false;')
+                  input(id='searchText', placeholder='Search for block indexes, block hashes, transactions or addresses...', type='text')
+                  input(type='submit', value='Search')
               div(class='transaction-main')
                 div(class='transaction-tr transaction-tr--main')
                   div(class='transaction-td')= 'Id'
