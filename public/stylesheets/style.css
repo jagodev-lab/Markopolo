@@ -667,6 +667,100 @@ a:hover, a:active, a:focus
   cursor: default;
 }
 
+.api
+{
+  display: table;
+  width: 100%;
+}
+
+.api .menu
+{
+  display: table-cell;
+  width: 400px;
+}
+
+.api .menu .menu-box
+{
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  display: block;
+  margin: 10px 0px 10px 20px;
+  padding: 20px 10px 10px 10px;
+  width: calc(100% - 40px);
+}
+
+.api .menu .menu-box h2
+{
+  display: inline-block;
+  margin: 0px 10px 0px 10px;
+  padding: 0px 0px 0px 0px;
+}
+
+.api .menu .menu-box ul
+{
+  list-style-type: none;
+  margin: 20px 10px 0px 20px;
+  padding: 0px 0px 0px 0px;
+}
+
+.api .menu .menu-box ul li
+{
+  margin: 10px 0px 10px 0px;
+}
+
+.api .menu .menu-box ul li a:active,
+.api .menu .menu-box ul li a:hover,
+.api .menu .menu-box ul li a:link,
+.api .menu .menu-box ul li a:visited
+{
+  color: #0000ee;
+  text-decoration: none;
+}
+
+.api .functions
+{
+  display: table-cell;
+}
+
+.api .functions h2
+{
+  background-color: #4444aa;
+  border-radius: 5px;
+  color: #ffffff;
+  display: inline-block;
+  margin: 10px 30px 10px 30px;
+  padding: 10px 10px 10px 10px;
+}
+
+.api .function
+{
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: block;
+  margin: 20px 20px 20px 20px;
+  padding: 10px 20px 10px 20px;
+}
+
+.api .function h3
+{
+  margin: 10px 0px 10px 0px;
+}
+
+.api .function .parameters
+{
+  background-color: #dedede;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0px 0px 10px 0px;
+  padding: 10px 10px 10px 10px;
+}
+
+.api .function .description
+{
+  display: block;
+}
+
 .footer
 {
   background-color: #ffffff;

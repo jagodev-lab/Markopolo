@@ -28,6 +28,10 @@ app.get('/address/:address', function (req, res) {
   }
 })
 
+app.get('/api', function (req, res) {
+  res.render('api', { title: 'Markopolo explorer' })
+})
+
 app.get('/api/v1.0/getaddress', function (req, res) {
   const address = req.query.address
   const addressReg = new RegExp('^([a-zA-Z0-9]{34})$')

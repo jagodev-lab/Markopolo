@@ -1,0 +1,150 @@
+doctype html
+html
+  head
+    include includes/head.pug
+  body
+    include includes/header.pug
+    |
+    div(class='body')
+      div(class='api')
+        div(class='menu')
+          div(class='menu-box')
+            h2 Functions menu
+            ul
+              li
+                a(href='#getAddress') getAddress
+              li
+                a(href='#getAddressTransactions') getAddressTransactions
+              li
+                a(href='#getBlock') getBlock
+              li
+                a(href='#getBlockByHash') getBlockByHash
+              li
+                a(href='#getBlockByIndex') getBlockByIndex
+              li
+                a(href='#getBlockchainInfo') getBlockchainInfo
+              li
+                a(href='#getBlockHash') getBlockHash
+              li
+                a(href='#getLastBlocks') getLastBlocks
+              li
+                a(href='#getLastTransactions') getLastTransactions
+              li
+                a(href='#getMiningInfo') getMiningInfo
+              li
+                a(href='#getRawTransaction') getRawTransaction
+              li
+                a(href='#getSupply') getSupply
+              li
+                a(href='#getTransaction') getTransaction
+              li
+                a(href='#search') search
+        div(class='functions')
+          h2 API v1.0
+          div(class='function' id='getAddress')
+            h3 getAddress
+            p
+              span(class='parameters')
+                | GET parameters: "address".
+              span(class='description')
+                | Returns main stored informations about the provided address: total received and spent coins, both confirmed and unconfirmed.
+          div(class='function' id='getAddressTransactions')
+            h3 getAddressTransactions
+            p
+              span(class='parameters')
+                | GET parameters: "address", "page" (optional, default is 1).
+              span(class='description')
+                | Returns up to 10 stored transactions regarding the provided address. Offset can be moved by setting the "page" parameter.
+          div(class='function' id='getBlock')
+            h3 getBlock
+            p
+              span(class='parameters') GET parameters: "hash" or "index".
+              span(class='description')
+                | Directly returns the client's answer by calling the "getblock" function, if providing an index it calls "getblockhash" before. It is reccomended to use either 
+                a(href='#getBlockByHash') getBlockByHash
+                |  or 
+                a(href='#getBlockByIndex') getBlockByIndex
+                |  for slightly better performance.
+          div(class='function' id='getBlockByHash')
+            h3 getBlockByHash
+            p
+              span(class='parameters')
+                | GET parameters: "hash".
+              span(class='description')
+                | Just like calling 
+                a(href='#getBlock') getBlock
+                |  with a "hash" parameter, but avoids futile checks for an eventual "index" parameter, being slightly faster.
+          div(class='function' id='getBlockByIndex')
+            h3 getBlockByIndex
+            p
+              span(class='parameters')
+                | GET parameters: "index".
+              span(class='description')
+                | Just like calling 
+                a(href='#getBlock') getBlock
+                |  with a "index" parameter, but avoids futile checks for an eventual "hash" parameter, being slightly faster.
+          div(class='function' id='getBlockchainInfo')
+            h3 getBlockchainInfo
+            p
+              span(class='parameters')
+                | No parameters.
+              span(class='description')
+                | Directly returns the client's answer by calling the "getblockchaininfo" function.
+          div(class='function' id='getBlockHash')
+            h3 getBlockHash
+            p
+              span(class='parameters')
+                | GET parameters: "index".
+              span(class='description')
+                | Directly returns the client's answer by calling the "getblockhash" function.
+          div(class='function' id='getLastBlocks')
+            h3 getLastBlocks
+            p
+              span(class='parameters')
+                | GET parameters: "page" (optional, default is 1).
+              span(class='description')
+                | Returns up to 10 blocks directly from the client. Offset can be moved by setting the "page" parameter.
+          div(class='function' id='getLastTransactions')
+            h3 getLastTransactions
+            p
+              span(class='parameters')
+                | GET parameters: "page" (optional, default is 1).
+              span(class='description')
+                | Returns up to 10 stored transactions. Offset can be moved by setting the "page" parameter.
+          div(class='function' id='getMiningInfo')
+            h3 getMiningInfo
+            p
+              span(class='parameters')
+                | No parameters.
+              span(class='description')
+                | Directly returns the client's answer by calling the "getblockchaininfo" function.
+          div(class='function' id='getRawTransaction')
+            h3 getRawTransaction
+            p
+              span(class='parameters')
+                | GET parameters: "id".
+              span(class='description')
+                | Directly returns the client's answer by calling the "getrawtransaction" function.
+          div(class='function' id='getSupply')
+            h3 getSupply
+            p
+              span(class='parameters')
+                | No parameters.
+              span(class='description')
+                | Returns the stored total coin supply.
+          div(class='function' id='getTransaction')
+            h3 getTransaction
+            p
+              span(class='parameters')
+                | GET parameters: "id" (either transaction's literal id or numeric index).
+              span(class='description')
+                | Returns main stored informations about the provided transaction.
+          div(class='function' id='search')
+            h3 search
+            p
+              span(class='parameters')
+                | GET parameters: "string" (must be a block index, block hash, transaction hash or address).
+              span(class='description')
+                | Returns a local URL to a page showing informations about the block, transaction or address provided..
+    |
+    include includes/footer.pug
