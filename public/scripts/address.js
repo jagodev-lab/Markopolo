@@ -54,14 +54,14 @@ function getAddressTransactions()
 
   if(window.XMLHttpRequest)
   {
-    xhttp2 = new XMLHttpRequest();
+    xhttp = new XMLHttpRequest();
   }
   else
   {
-    xhttp2 = new ActiveXObject("Microsoft.XMLHTTP");
+    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
   }
 
-  xhttp2.onreadystatechange = function()
+  xhttp.onreadystatechange = function()
   {
     if(this.readyState == 4 && this.status == 200)
     {
@@ -111,8 +111,8 @@ function getAddressTransactions()
     }
   };
 
-  xhttp2.open("GET", "/api/v1.0/getaddresstransactions?address=" + address, true);
-  xhttp2.send();
+  xhttp.open("GET", "/api/v1.0/getaddresstransactions?address=" + address, true);
+  xhttp.send();
 }
 
 function getAddress()
