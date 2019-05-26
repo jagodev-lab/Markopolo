@@ -281,6 +281,7 @@ a:hover, a:active, a:focus
 .summary .last-blocks .blocks-table,
 .transactions .last-transactions .transactions-table,
 .transaction .transaction-info .transaction-main,
+.transaction .transaction-info .transaction-block,
 .transaction .transaction-info .transaction-summary,
 .address .address-info .address-main,
 .address .address-info .address-summary,
@@ -425,11 +426,8 @@ a:hover, a:active, a:focus
   font-weight: bold;
 }
 
-.transaction .transaction-info .transaction-main
-{
-  border-collapse: separate;
-}
-
+.transaction .transaction-info .transaction-main,
+.transaction .transaction-info .transaction-block,
 .transaction .transaction-info .transaction-summary
 {
   border-collapse: separate;
@@ -448,6 +446,7 @@ a:hover, a:active, a:focus
 .transaction .transaction-info .transaction-main .transaction-tr--values:last-child .transaction-td:last-child
 {
   background-color: #44cc44;
+  border: none;
   color: #ffffff;
   font-weight: bold;
 }

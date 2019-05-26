@@ -31,13 +31,22 @@ html
             div(class='content')
               div(class='transaction-main')
                 div(class='transaction-tr transaction-tr--main')
+                  div(class='transaction-td')= 'Id'
                   div(class='transaction-td')= 'Transaction'
                   div(class='transaction-td')= 'Value'
                 div(class='transaction-tr transaction-tr--values')
-                  div(class='transaction-td' id='transactionId')= transaction
+                  div(class='transaction-td' id='transactionId')
+                  div(class='transaction-td' id='transaction')= transaction
                   div(class='transaction-td')
                     span(class='value' id='transactionValue')
                     span(class='currency')= ' VDN'
+              div(class='transaction-block')
+                div(class='transaction-tr transaction-tr--main')
+                  div(class='transaction-td')= 'Block'
+                  div(class='transaction-td')= 'Time'
+                div(class='transaction-tr transaction-tr--values')
+                  div(class='transaction-td' id='transactionBlock')
+                  div(class='transaction-td' id='transactionTime')
               div(class='transaction-summary')
                 div(class='transaction-tr transaction-tr--main')
                   div(class='transaction-td')= 'Inputs'

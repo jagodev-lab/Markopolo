@@ -63,18 +63,25 @@ function getTransaction()
     {
       const result = JSON.parse(this.responseText);
 
+      const id = result._id;
       const value = result.value;
+      const block = result.block;
+      var date = new Date(result.timestamp * 1000);
+      date = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
       const inputs = result.inputs;
       const outputs = result.outputs;
 
+      document.getElementById("transactionId").innerHTML = id;
       document.getElementById("transactionValue").innerHTML = value;
+      document.getElementById("transactionBlock").innerHTML = block;
+      document.getElementById("transactionTime").innerHTML = date;
 
       for(var i = 0; i < inputs.length; i++)
       {
         document.getElementById("transactionInputs").innerHTML += "\
             <div class='inputs-tr inputs-tr--values" + (inputs[i].coinbase ? " inputs-tr--coinbase" : "") + "'>\
               <div class='inputs-td'>\
-                " + (inputs[i].coinbase ? "Coinbase" : inputs[i].sender) + "\
+                " + (inputs[i].coinbase ? "Coinbase" : ("<a href=\"/address/" + inputs[i].sender + "\">" + inputs[i].sender + "</a>")) + "\
               </div>\
               <div class='inputs-td'>\
                 " + inputs[i].value + " VDN\
@@ -88,7 +95,7 @@ function getTransaction()
         document.getElementById("transactionOutputs").innerHTML += "\
             <div class='outputs-tr outputs-tr--values'>\
               <div class='outputs-td'>\
-                " + outputs[i].recipient + "\
+                " + "<a href=\"/address/" + outputs[i].recipient + "\">" + outputs[i].recipient + "</a>\
               </div>\
               <div class='outputs-td'>\
                 " + outputs[i].value + " VDN\
@@ -99,7 +106,7 @@ function getTransaction()
     }
   };
 
-  xhttp.open("GET", "/api/v1.0/gettransaction?id=" + document.getElementById("transactionId").innerHTML, true);
+  xhttp.open("GET", "/api/v1.0/gettransaction?id=" + document.getElementById("transaction").innerHTML, true);
   xhttp.send();
 }
 
