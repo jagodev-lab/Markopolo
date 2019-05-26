@@ -389,7 +389,7 @@ app.get('/api/v1.0/search', function (req, res) {
 
     client.getBlockchainInfo().then(info => {
       if (info.blocks >= index) {
-        res.redirect('/block/' + index)
+        res.json({ url: '/block/' + index })
       } else {
         res.json({ error: true, message: 'Block index is greater than blockchain height.' })
       }
