@@ -108,6 +108,15 @@ function getAddressTransactions()
           </div>\
         ";
       }
+
+      if(result.length == 10)
+      {
+        document.getElementById("addressTransactions").outerHTML += "\
+          <span class=\"disclaimer\">\
+            * Showing only last 10 transactions.\
+          </span>\
+        ";
+      }
     }
   };
 

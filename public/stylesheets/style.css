@@ -521,6 +521,14 @@ a:hover, a:active, a:focus
   border-bottom-right-radius: 10px;
 }
 
+.address .address-info .disclaimer
+{
+  color: #444444;
+  display: block;
+  font-style: italic;
+  margin: 10px 0px 0px 0px;
+}
+
 .transaction .transaction-info .transaction-main .transaction-tr--values:last-child .transaction-td:last-child
 {
   background-color: #44cc44;
