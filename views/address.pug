@@ -1,0 +1,58 @@
+doctype html
+html
+  head
+    include includes/head.pug
+    |
+    script(src='/scripts/address.js')
+  body
+    include includes/header.pug
+    |
+    div(class='body')
+      div(class='address')
+        div(class='coin-info')
+          div(class='preview')
+            img(src='/images/coin.png')
+          div(class='info-table')
+            div(class='info-tr')
+              div(class='name') Net hashrate (MH/s)
+              div(class='value', id='coinInfoHashrate') -
+            div(class='info-tr')
+              div(class='name') Difficulty
+              div(class='value', id='coinInfoDifficulty') -
+            div(class='info-tr')
+              div(class='name') Supply
+              div(class='value', id='coinInfoSupply') -
+          a(href='https://www.vdinar.info', target='_blank')
+            div(class='website')
+              div(class='title') vDinar's official website
+              div(class='url') https://www.vdinar.info
+        div(class='address-info')
+          div(class='container')
+            div(class='content')
+              div(class='address-main')
+                div(class='address-tr address-tr--main')
+                  div(class='address-td')= 'Address'
+                  div(class='address-td')= 'Credit'
+                div(class='address-tr address-tr--values')
+                  div(class='address-td' id='address')= address
+                  div(class='address-td credit')
+                    span(class='credit' id='addressCredit')
+                    span(class='currency')= ' VDN'
+              div(class='address-summary')
+                div(class='address-tr address-tr--main')
+                  div(class='address-td')= 'Received'
+                  div(class='address-td')= 'Spent'
+                div(class='address-tr address-tr--values')
+                  div(class='address-td received')
+                    span(class='value' id='addressReceived')
+                    span(class='currency')= ' VDN'
+                  div(class='address-td spent')
+                    span(class='value' id='addressSpent')
+                    span(class='currency')= ' VDN'
+              div(class='address-transactions' id='addressTransactions')
+                div(class='address-tr address-tr--main')
+                  div(class='address-td')= 'Time'
+                  div(class='address-td')= 'Transaction'
+                  div(class='address-td')= 'Value'
+    |
+    include includes/footer.pug

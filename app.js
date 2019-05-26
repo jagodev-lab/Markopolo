@@ -17,6 +17,102 @@ app.get('/', function (req, res) {
   res.render('homepage', { title: 'Markopolo explorer' })
 })
 
+app.get('/address/:address', function (req, res) {
+  const address = req.params.address
+  const addressReg = new RegExp('^([a-zA-Z0-9]{34})$')
+
+  if (!addressReg.test(address)) {
+    res.redirect('/')
+  } else {
+    res.render('address', { title: 'Markopolo explorer', address: address })
+  }
+})
+
+app.get('/api/v1.0/getaddress', function (req, res) {
+  const address = req.query.address
+  const addressReg = new RegExp('^([a-zA-Z0-9]{34})$')
+
+  if (addressReg.test(address)) {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+      if (err) {
+        throw err
+      }
+      var dbo = db.db("markopolo")
+
+      dbo.collection("addresses").findOne(
+        { address: address },
+        function(err, result) {
+          if (err) {
+            throw err
+          }
+
+          res.json(result)
+          db.close()
+        }
+      )
+    })
+  } else {
+    res.json({ error: true, message: 'Address is not valid.' })
+  }
+})
+
+app.get('/api/v1.0/getaddresstransactions', function (req, res) {
+  const address = req.query.address
+  const addressReg = new RegExp('^([a-zA-Z0-9]{34})$')
+
+  var offset = 0;
+
+  if (typeof req.query.page != 'undefined') {
+    const page = Math.max(0, parseInt(req.query.page) - 1)
+    offset = page * 10
+  }
+
+  if (addressReg.test(address)) {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+      if (err) {
+        throw err
+      }
+      var dbo = db.db("markopolo")
+
+      dbo.collection("transactions").find(
+        {
+          $or: [
+            {
+              inputs: {
+                $elemMatch: {
+                  sender: address
+                }
+              }
+            },
+            {
+              outputs: {
+                $elemMatch: {
+                  recipient: address
+                }
+              }
+            }
+          ]
+        }
+      ).sort(
+        {
+          timestamp: -1
+        }
+      ).skip(offset).limit(10).toArray(
+        function(err, result) {
+          if (err) {
+            throw err
+          }
+
+          res.json(result)
+          db.close()
+        }
+      )
+    })
+  } else {
+    res.json({ error: true, message: 'Address is not valid.' })
+  }
+})
+
 app.get('/api/v1.0/getblock', function (req, res) {
   if (typeof req.query.hash != 'undefined') {
     const hash = req.query.hash

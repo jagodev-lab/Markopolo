@@ -74,7 +74,8 @@ a:hover, a:active, a:focus
 
 .summary,
 .transactions,
-.transaction
+.transaction,
+.address
 {
   display: table;
   height: 567px;
@@ -84,7 +85,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info,
 .transactions .coin-info,
-.transaction .coin-info
+.transaction .coin-info,
+.address .coin-info
 {
   background-color: #ffffff;
   border-radius: 20px;
@@ -98,7 +100,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .preview,
 .transactions .coin-info .preview,
-.transaction .coin-info .preview
+.transaction .coin-info .preview,
+.address .coin-info .preview
 {
   background-image: url("/images/preview.png");
   border-top-left-radius: 20px;
@@ -108,7 +111,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .preview img,
 .transactions .coin-info .preview img,
-.transaction .coin-info .preview img
+.transaction .coin-info .preview img,
+.address .coin-info .preview img
 {
   border-radius: 64px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
@@ -119,7 +123,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .info-tr,
 .transactions .coin-info .info-tr,
-.transaction .coin-info .info-tr
+.transaction .coin-info .info-tr,
+.address .coin-info .info-tr
 {
   border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -130,7 +135,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .name,
 .transactions .coin-info .name,
-.transaction .coin-info .name
+.transaction .coin-info .name,
+.address .coin-info .name
 {
   font-size: 18px;
   font-weight: bold;
@@ -140,7 +146,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .value,
 .transactions .coin-info .value,
-.transaction .coin-info .value
+.transaction .coin-info .value,
+.address .coin-info .value
 {
   font-size: 16px;
   line-height: 18px;
@@ -148,14 +155,16 @@ a:hover, a:active, a:focus
 
 .summary .coin-info a,
 .transactions .coin-info a,
-.transaction .coin-info a
+.transaction .coin-info a,
+.address .coin-info a
 {
   text-decoration: none;
 }
 
 .summary .coin-info .website,
 .transactions .coin-info .website,
-.transaction .coin-info .website
+.transaction .coin-info .website,
+.address .coin-info .website
 {
   border-radius: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -166,7 +175,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .website .title,
 .transactions .coin-info .website .title,
-.transaction .coin-info .website .title
+.transaction .coin-info .website .title,
+.address .coin-info .website .title
 {
   color: #4444cc;
   font-size: 18px;
@@ -177,7 +187,8 @@ a:hover, a:active, a:focus
 
 .summary .coin-info .website .url,
 .transactions .coin-info .website .url,
-.transaction .coin-info .website .url
+.transaction .coin-info .website .url,
+.address .coin-info .website .url
 {
   color: #6666cc;
   font-size: 16px;
@@ -186,7 +197,8 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks,
 .transactions .last-transactions,
-.transaction .transaction-info
+.transaction .transaction-info,
+.address .address-info
 {
   display: table-cell;
   padding: 0px 0px 0px 20px;
@@ -195,7 +207,8 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .container,
 .transactions .last-transactions .container,
-.transaction .transaction-info .container
+.transaction .transaction-info .container,
+.address .address-info .container
 {
   background-color: #ffffff;
   border-radius: 20px;
@@ -205,9 +218,16 @@ a:hover, a:active, a:focus
   width: 100%;
 }
 
+.address .address-info .container
+{
+  height: auto;
+  min-height: 567px;
+}
+
 .summary .last-blocks .content,
 .transactions .last-transactions .content,
-.transaction .transaction-info .content
+.transaction .transaction-info .content,
+.address .address-info .content
 {
   margin: 20px 20px 20px 20px;
   width: calc(100% - 40px);
@@ -261,7 +281,10 @@ a:hover, a:active, a:focus
 .summary .last-blocks .blocks-table,
 .transactions .last-transactions .transactions-table,
 .transaction .transaction-info .transaction-main,
-.transaction .transaction-info .transaction-summary
+.transaction .transaction-info .transaction-summary,
+.address .address-info .address-main,
+.address .address-info .address-summary,
+.address .address-info .address-transactions
 {
   border-collapse: collapse;
   display: table;
@@ -270,16 +293,30 @@ a:hover, a:active, a:focus
   width: 100%;
 }
 
+.address .address-info .address-main
+{
+  border-collapse: separate;
+}
+
+.address .address-info .address-summary .spent
+{
+  background-color: #ff4444;
+  color: #ffffff;
+  font-weight: bold;
+}
+
 .summary .last-blocks .blocks-tr,
 .transactions .last-transactions .transactions-tr,
-.transaction .transaction-info .transaction-tr
+.transaction .transaction-info .transaction-tr,
+.address .address-info .address-tr
 {
   display: table-row;
 }
 
 .summary .last-blocks .blocks-tr--main,
 .transactions .last-transactions .transactions-tr--main,
-.transaction .transaction-info .transaction-tr--main
+.transaction .transaction-info .transaction-tr--main,
+.address .address-info .address-tr--main
 {
   color: #ffffff;
   font-size: 20px;
@@ -289,7 +326,8 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-tr--values,
 .transactions .last-transactions .transactions-tr--values,
-.transaction .transaction-info .transaction-tr--values
+.transaction .transaction-info .transaction-tr--values,
+.address .address-info .address-tr--values
 {
   font-size: 20px;
   line-height: 22px;
@@ -297,7 +335,8 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-td,
 .transactions .last-transactions .transactions-td,
-.transaction .transaction-info .transaction-td
+.transaction .transaction-info .transaction-td,
+.address .address-info .address-td
 {
   display: table-cell;
   padding: 10px 10px 10px 10px;
@@ -305,7 +344,8 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-tr--main .blocks-td,
 .transactions .last-transactions .transactions-tr--main .transactions-td,
-.transaction .transaction-info .transaction-tr--main .transaction-td
+.transaction .transaction-info .transaction-tr--main .transaction-td,
+.address .address-info .address-tr--main .address-td
 {
   background-color: #6666cc;
   display: table-cell;
@@ -313,27 +353,76 @@ a:hover, a:active, a:focus
 
 .summary .last-blocks .blocks-tr--main .blocks-td:first-child,
 .transactions .last-transactions .transactions-tr--main .transactions-td:first-child,
-.transaction .transaction-info .transaction-tr--main .transaction-td:first-child
+.transaction .transaction-info .transaction-tr--main .transaction-td:first-child,
+.address .address-info .address-tr--main .address-td:first-child
 {
   border-top-left-radius: 10px;
 }
 
 .summary .last-blocks .blocks-tr--main .blocks-td:last-child,
 .transactions .last-transactions .transactions-tr--main .transactions-td:last-child,
-.transaction .transaction-info .transaction-tr--main .transaction-td:last-child
+.transaction .transaction-info .transaction-tr--main .transaction-td:last-child,
+.address .address-info .address-tr--main .address-td:last-child
 {
   border-top-right-radius: 10px;
 }
 
 .summary .last-blocks .blocks-tr--values .blocks-td,
 .transactions .last-transactions .transactions-tr--values .transactions-td,
-.transaction .transaction-info .transaction-tr--values .transaction-td
+.transaction .transaction-info .transaction-tr--values .transaction-td,
+.address .address-info .address-tr--values .address-td
 {
   border: 1px solid #eeeeee;
   display: table-cell;
   font-size: 16px;
   line-height: 18px;
   padding: 10px 0px 10px 0px;
+}
+
+.address .address-info .address-main .address-td:last-child
+{
+  border: none;
+}
+
+.address .address-info .address-main .credit
+{
+  background-color: #44cc44;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.address .address-info .address-summary .address-td
+{
+  border: none;
+  width: 50%;
+}
+
+.address .address-info .address-summary .received
+{
+  background-color: #44cc44;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.address .address-info .address-summary .spent
+{
+  background-color: #ff4444;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.address .address-info .address-transactions .received
+{
+  background-color: #44cc44;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.address .address-info .address-transactions .spent
+{
+  background-color: #ff4444;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 .transaction .transaction-info .transaction-main
