@@ -67,8 +67,16 @@ function updateBlocks()
 
       for(var i = 0; i < result.length; i++)
       {
-        document.getElementById("blockIndex" + (i + 1)).innerHTML = result[i].height;
-        document.getElementById("blockHash" + (i + 1)).innerHTML = result[i].hash;
+        document.getElementById("blockIndex" + (i + 1)).innerHTML = "\
+          <a href=\"/block/" + result[i].height + "\">\
+            " + result[i].height + "\
+          </a>\
+        ";
+        document.getElementById("blockHash" + (i + 1)).innerHTML = "\
+          <a href=\"/block/" + result[i].hash + "\">\
+            " + result[i].hash + "\
+          </a>\
+        ";
         document.getElementById("blockTxCount" + (i + 1)).innerHTML = result[i].tx.length;
       }
     }

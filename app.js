@@ -378,6 +378,33 @@ app.get('/api/v1.0/gettransaction', function (req, res) {
   }
 })
 
+app.get('/block/:block', function (req, res) {
+  const block = req.params.block
+  const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
+  const idReg = new RegExp('^([0-9]+)$')
+
+  if (!hashReg.test(block) && !idReg.test(block)) {
+    res.redirect('/')
+  } else {
+    if (!hashReg.test(block)) {
+      const index = parseInt(block);
+
+      client.getBlockchainInfo().then(info => {
+        if (info.blocks >= index) {
+          client.getBlockHash(index).then(hash => {
+            res.redirect('/block/' + hash)
+          })
+        } else {
+          res.redirect('/')
+        }
+      })
+
+    } else {
+      res.render('block', { title: 'Markopolo explorer', block: block })
+    }
+  }
+})
+
 app.get('/transaction/:txid', function (req, res) {
   const id = req.params.txid
   const idReg = new RegExp('^([a-zA-Z0-9]{64})$')

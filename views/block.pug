@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    include includes/head.pug
+    |
+    script(src='/scripts/block.js')
+  body
+    include includes/header.pug
+    |
+    div(class='body')
+      div(class='block')
+        div(class='coin-info')
+          div(class='preview')
+            img(src='/images/coin.png')
+          div(class='info-table')
+            div(class='info-tr')
+              div(class='name') Net hashrate (MH/s)
+              div(class='value', id='coinInfoHashrate') -
+            div(class='info-tr')
+              div(class='name') Difficulty
+              div(class='value', id='coinInfoDifficulty') -
+            div(class='info-tr')
+              div(class='name') Supply
+              div(class='value', id='coinInfoSupply') -
+          a(href='https://www.vdinar.info', target='_blank')
+            div(class='website')
+              div(class='title') vDinar's official website
+              div(class='url') https://www.vdinar.info
+        div(class='block-info')
+          div(class='container')
+            div(class='content')
+              div(class='block-main')
+                div(class='block-tr block-tr--main')
+                  div(class='block-td')= 'Height'
+                  div(class='block-td')= 'Block hash'
+                  div(class='block-td')= 'Time'
+                div(class='block-tr block-tr--values')
+                  div(class='block-td' id='blockHeight')
+                  div(class='block-td' id='block')= block
+                  div(class='block-td' id='blockTime')
+              div(class='block-summary')
+                div(class='block-tr block-tr--main')
+                  div(class='block-td')= 'Merkle root'
+                  div(class='block-td')= 'Confirmations'
+                  div(class='block-td')= 'Difficulty'
+                div(class='block-tr block-tr--values')
+                  div(class='block-td' id='blockMerkle')
+                  div(class='block-td' id='blockConfirmations')
+                  div(class='block-td' id='blockDifficulty')
+              div(class='block-transactions' id='blockTransactions')
+                div(class='block-tr block-tr--main')
+                  div(class='block-td')= 'Id'
+                  div(class='block-td')= 'Transaction'
+                  div(class='block-td')= 'Coinbase'
+                  div(class='block-td')= 'Genesis'
+    |
+    include includes/footer.pug

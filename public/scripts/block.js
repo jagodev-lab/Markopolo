@@ -46,8 +46,10 @@ function updateCoinInfo()
   xhttp.send();
 }
 
-function getTransaction()
+function getBlock()
 {
+  var xhttp;
+
   if(window.XMLHttpRequest)
   {
     xhttp = new XMLHttpRequest();
@@ -63,60 +65,75 @@ function getTransaction()
     {
       const result = JSON.parse(this.responseText);
 
-      const id = result._id;
-      const value = result.value;
-      const block = result.block;
-      var date = new Date(result.timestamp * 1000);
+      const height = result.height;
+      var date = new Date(result.time * 1000);
       date = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-      const inputs = result.inputs;
-      const outputs = result.outputs;
+      const merkleRoot = result.merkleroot;
+      const confirmations = result.confirmations;
+      const difficulty = result.difficulty
 
-      document.getElementById("transactionId").innerHTML = id;
-      document.getElementById("transactionValue").innerHTML = value;
-      document.getElementById("transactionBlock").innerHTML = "\
-        <a href=\"/block/" + block + "\">\
-          " + block + "\
-        </a>\
-      ";
-      document.getElementById("transactionTime").innerHTML = date;
+      document.getElementById("blockHeight").innerHTML = height;
+      document.getElementById("blockTime").innerHTML = date;
+      document.getElementById("blockMerkle").innerHTML = merkleRoot;
+      document.getElementById("blockConfirmations").innerHTML = confirmations;
+      document.getElementById("blockDifficulty").innerHTML = difficulty;
 
-      for(var i = 0; i < inputs.length; i++)
+      if(height > 0)
       {
-        document.getElementById("transactionInputs").innerHTML += "\
-            <div class='inputs-tr inputs-tr--values" + (inputs[i].coinbase ? " inputs-tr--coinbase" : "") + "'>\
-              <div class='inputs-td'>\
-                " + (inputs[i].coinbase ? "Coinbase" : ("<a href=\"/address/" + inputs[i].sender + "\">" + inputs[i].sender + "</a>")) + "\
+        for(var i = 0; i < result.tx.length; i++)
+        {
+          document.getElementById("blockTransactions").innerHTML += "\
+            <div class=\"block-tr block-tr--values\">\
+              <div class=\"block-td\">\
+                " + (i + 1) + "\
               </div>\
-              <div class='inputs-td'>\
-                " + inputs[i].value + " VDN\
+              <div class=\"block-td\">\
+                <a href=\"/transaction/" + result.tx[i] + "\">\
+                  " + result.tx[i] + "\
+                </a>\
+              </div>\
+              <div class=\"block-td " + ((i <= 1) ? "affirmative" : "negative") + "\">\
+                " + ((i <= 1) ? "Yes" : "No") + "\
+              </div>\
+              <div class=\"block-td negative\">\
+                No\
               </div>\
             </div>\
           ";
+        }
       }
-
-      for(var i = 0; i < outputs.length; i++)
+      else
       {
-        document.getElementById("transactionOutputs").innerHTML += "\
-            <div class='outputs-tr outputs-tr--values'>\
-              <div class='outputs-td'>\
-                " + "<a href=\"/address/" + outputs[i].recipient + "\">" + outputs[i].recipient + "</a>\
+        for(var i = 0; i < result.tx.length; i++)
+        {
+          document.getElementById("blockTransactions").innerHTML += "\
+            <div class=\"block-tr block-tr--values\">\
+              <div class=\"block-td\">\
+                " + (i + 1) + "\
               </div>\
-              <div class='outputs-td'>\
-                " + outputs[i].value + " VDN\
+              <div class=\"block-td\">\
+                " + result.tx[i] + "\
+              </div>\
+              <div class=\"block-td affirmative\">\
+                Yes\
+              </div>\
+              <div class=\"block-td affirmative\">\
+                Yes\
               </div>\
             </div>\
           ";
+        }
       }
     }
   };
 
-  xhttp.open("GET", "/api/v1.0/gettransaction?id=" + document.getElementById("transaction").innerHTML, true);
+  xhttp.open("GET", "/api/v1.0/getblock?hash=" + document.getElementById("block").innerHTML, true);
   xhttp.send();
 }
 
 r(function()
   {
-    getTransaction();
+    getBlock();
     updateCoinInfo();
     setInterval(updateCoinInfo, 10000);
   });
