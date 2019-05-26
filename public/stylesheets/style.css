@@ -313,11 +313,6 @@ a:hover, a:active, a:focus
   width: 100%;
 }
 
-.address .address-info .address-main
-{
-  border-collapse: separate;
-}
-
 .address .address-info .address-summary .spent
 {
   background-color: #ff4444;
@@ -421,6 +416,12 @@ a:hover, a:active, a:focus
   font-weight: bold;
 }
 
+.address .address-info .address-transactions .received,
+.block .block-info .block-transactions .affirmative
+{
+  border: 1px solid #55dd55;
+}
+
 .address .address-info .address-summary .address-td
 {
   border: none;
@@ -433,6 +434,12 @@ a:hover, a:active, a:focus
   background-color: #ff4444;
   color: #ffffff;
   font-weight: bold;
+}
+
+.address .address-info .address-transactions .spent,
+.block .block-info .block-transactions .negative
+{
+  border: 1px solid #ff5555;
 }
 
 .block .block-info .block-transactions .affirmative
@@ -451,17 +458,40 @@ a:hover, a:active, a:focus
 
 .transaction .transaction-info .transaction-main,
 .transaction .transaction-info .transaction-block,
-.transaction .transaction-info .transaction-summary
+.transaction .transaction-info .transaction-summary,
+.address .address-info .address-main,
+.address .address-info .address-transactions,
+.block .block-info .block-main,
+.block .block-info .block-summary,
+.block .block-info .block-transactions
 {
   border-collapse: separate;
 }
 
-.transaction .transaction-tr--values:last-child .transaction-td:first-child
+.transaction .transaction-info .transaction-tr--values .transaction-td:nth-child(n + 2),
+.address .address-info .address-tr--values .address-td:nth-child(n + 2),
+.block .block-info .block-tr--values .block-td:nth-child(n + 2)
+{
+  border-left: none;
+}
+
+.transaction .transaction-info .transaction-tr--values:nth-of-type(n + 2) .transaction-td,
+.address .address-info .address-tr--values:nth-of-type(n + 2) .address-td,
+.block .block-info .block-tr--values:nth-of-type(n + 2) .block-td
+{
+  border-top: none;
+}
+
+.transaction .transaction-tr--values:last-child .transaction-td:first-child,
+.address .address-tr--values:last-child .address-td:first-child,
+.block .block-tr--values:last-child .block-td:first-child
 {
   border-bottom-left-radius: 10px;
 }
 
-.transaction .transaction-tr--values:last-child .transaction-td:last-child
+.transaction .transaction-tr--values:last-child .transaction-td:last-child,
+.address .address-tr--values:last-child .address-td:last-child,
+.block .block-tr--values:last-child .block-td:last-child
 {
   border-bottom-right-radius: 10px;
 }
