@@ -712,7 +712,11 @@ a:hover, a:active, a:focus
 .api .menu .menu-box ul li a:active,
 .api .menu .menu-box ul li a:hover,
 .api .menu .menu-box ul li a:link,
-.api .menu .menu-box ul li a:visited
+.api .menu .menu-box ul li a:visited,
+.api .functions .function a:active,
+.api .functions .function a:hover,
+.api .functions .function a:link,
+.api .functions .function a:visited
 {
   color: #0000ee;
   text-decoration: none;
