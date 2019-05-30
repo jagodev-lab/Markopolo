@@ -123,7 +123,7 @@ app.get('/api/v1.0/getblock', function (req, res) {
     const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
 
     if (hashReg.test(hash)) {
-      client.getBlock(req.query.hash).then((result) => res.json(result))
+      client.getBlock(hash).then((result) => res.json(result))
       .catch((error) => {
         res.json({ error: true, message: 'Block hash does not correspond to any existing block.' })
       })
@@ -161,7 +161,7 @@ app.get('/api/v1.0/getblockbyhash', function (req, res) {
     const hashReg = new RegExp('^([a-zA-Z0-9]{64})$')
 
     if (hashReg.test(hash)) {
-      client.getBlock(req.query.hash).then((result) => res.json(result))
+      client.getBlock(hash).then((result) => res.json(result))
       .catch((error) => {
         res.json({ error: true, message: 'Block hash does not correspond to any existing block.' })
       })
