@@ -300,7 +300,7 @@ app.get('/api/v1.0/getrawtransaction', function (req, res) {
     const id = req.query.id
     const idReg = new RegExp('^([a-zA-Z0-9]{64})$')
 
-    if (hashReg.test(id)) {
+    if (idReg.test(id)) {
       client.getRawTransaction(req.query.id).then((result) => res.json(result))
       .catch((error) => {
         res.json({ error: true, message: 'Transaction id does not correspond to any existing transaction.' })
