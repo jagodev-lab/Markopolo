@@ -133,9 +133,15 @@ async function readBlockchain(hash) {
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " blocks round's last block's index is " + lastHeight + ".");
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " blocks round's last block's hash is " + lastHash + ".");
 
-  while (hash != lastHash) {
+  var lastLoop = false;
+  while (!lastLoop) {
     var newTransactions = [];
-    while (newTransactions.length < transactionsPerRound && hash != lastHash) {
+    while (newTransactions.length < transactionsPerRound && !lastLoop) {
+      // Read one last block if last
+      if(hash == lastHash) {
+        lastLoop = true;
+      }
+
       var block = await client.getBlock(hash);
 
       var confirmed = block.height < lastHeight - requiredConfirmations;
@@ -389,7 +395,10 @@ async function readBlockchain(hash) {
         }
       }
 
-      hash = block.nextblockhash;
+      // Update hash only if not reading last block
+      if(!lastLoop) {
+        hash = block.nextblockhash;
+      }
     }
 
     transactions = transactions.concat(newTransactions);
