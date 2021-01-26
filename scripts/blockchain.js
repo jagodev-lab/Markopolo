@@ -54,23 +54,9 @@ async function initReading() {
 
         if (res) {
           if (res.updating) {
-            var updating = true;
-            while (updating) {
-              // Red background color
-              console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " blockchain is being updated by another instance! Trying again in 30 seconds...");
-              // Wait 30 seconds
-              await delay(30000);
-              await dbo.collection("info").findOne(
-                { _id: 0 },
-                function(err, newRes) {
-                  if (err) {
-                    throw err;
-                  }
-
-                  updating = newRes.updating;
-                }
-              );
-            }
+            db.close();
+            console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " blockchain is being updated by another instance! Closing this process.");
+            return;
           }
 
           supply = res.supply;
