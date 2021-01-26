@@ -498,4 +498,8 @@ async function readBlockchain(hash) {
   });
 }
 
-initReading();
+try {
+  initReading();
+} catch (err) {
+  throw err;
+}
