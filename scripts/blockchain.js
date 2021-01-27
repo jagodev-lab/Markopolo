@@ -13,14 +13,14 @@ var unconfirmedSupply = 0;
 var transactions = [];
 var transactionsCount = 0;
 var unconfirmedTransactionsCount = 0;
-// Declaring donations address as first address
-var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
+var addresses;
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 async function initReading() {
   // Reset values to allow multiple reads
   transactions = [];
+  // Declaring donations address as first address
   addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
   unconfirmedTransactionsCount = 0;
   unconfirmedSupply = 0;
