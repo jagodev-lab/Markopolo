@@ -31,7 +31,7 @@ async function initReading() {
   unconfirmedTransactionsCount = 0;
   unconfirmedSupply = 0;
 
-  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+  MongoClient.connect(mongoUrl, { socketTimeoutMS : 0, useNewUrlParser: true }, function(err, db) {
     if (err) {
       logFile.write("Error while connecting to database:\n" + err + "\n");
       endLogFile();
@@ -420,7 +420,7 @@ async function readBlockchain(hash) {
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 
   // Connect to database
-  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+  MongoClient.connect(mongoUrl, { socketTimeoutMS : 0, useNewUrlParser: true }, function(err, db) {
     if (err) {
       logFile.write("Error while connecting to database:\n" + err + "\n");
       endLogFile();
