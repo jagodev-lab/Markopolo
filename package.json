@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jagodev-lab/Markopolo#readme",
   "dependencies": {
     "@vdinar/vdinar-rpc": "^0.1.0",
+    "bignumber.js": "^9.0.1",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
     "mongodb": "^3.2.3",

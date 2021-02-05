@@ -30,12 +30,12 @@ function updateCoinInfo()
         {
           const supplyInfo = JSON.parse(this.responseText);
 
-          const supply = (supplyInfo.confirmed + supplyInfo.unconfirmed).toFixed(2);
+          const supply = new BigNumber(supplyInfo.confirmed).plus(supplyInfo.unconfirmed).toFixed(2);
 
           document.getElementById("coinInfoHashrate").innerHTML = hashrate;
           document.getElementById("coinInfoDifficulty").innerHTML = difficulty;
 
-          document.getElementById("coinInfoSupply").innerHTML = supply;
+          document.getElementById("coinInfoSupply").innerHTML = supply.toString();
         }
       }
 
