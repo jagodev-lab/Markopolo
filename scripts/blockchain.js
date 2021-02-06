@@ -8,25 +8,33 @@ const blocksPerUpdate = 500;
 const transactionsPerRound = 500;
 const requiredConfirmations = 6;
 
+const fs = require('fs');
+const logFile = fs.createWriteStream("Markopolo/logs/blockchain-log.txt", {flags: "a"});
+
 var supply = 0;
 var unconfirmedSupply = 0;
 var transactions = [];
 var transactionsCount = 0;
 var unconfirmedTransactionsCount = 0;
-// Declaring donations address as first address
-var addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
+var addresses;
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 async function initReading() {
+  // Log start
+  logFile.write("Starting blockchain synchronization. Time: " + new Date().toISOString() + ".\n");
+
   // Reset values to allow multiple reads
   transactions = [];
+  // Declaring donations address as first address
   addresses = [{ address: "DG1KpSsSXd3uitgwHaA1i6T1Bj1hWEwAxB", received: 0, spent: 0, unconfirmedReceived: 0, unconfirmedSpent: 0 }];
   unconfirmedTransactionsCount = 0;
   unconfirmedSupply = 0;
 
-  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+  MongoClient.connect(mongoUrl, { socketTimeoutMS : 0, useNewUrlParser: true }, function(err, db) {
     if (err) {
+      logFile.write("Error while connecting to database:\n" + err + "\n");
+      endLogFile();
       throw err;
     }
     var dbo = db.db("markopolo");
@@ -36,6 +44,8 @@ async function initReading() {
       { _id: 0},
       async function(err, res) {
         if (err) {
+          logFile.write("Error while checking wether \"info\" collection exists:\n" + err + "\n");
+          endLogFile();
           throw err;
         }
 
@@ -47,6 +57,8 @@ async function initReading() {
           { upsert: true },
           function(err, res) {
             if (err) {
+              logFile.write("Error while setting status as true in collection \"info\":\n" + err + "\n");
+              endLogFile();
               throw err;
             }
           }
@@ -54,23 +66,11 @@ async function initReading() {
 
         if (res) {
           if (res.updating) {
-            var updating = true;
-            while (updating) {
-              // Red background color
-              console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " blockchain is being updated by another instance! Trying again in 30 seconds...");
-              // Wait 30 seconds
-              await delay(30000);
-              await dbo.collection("info").findOne(
-                { _id: 0 },
-                function(err, newRes) {
-                  if (err) {
-                    throw err;
-                  }
-
-                  updating = newRes.updating;
-                }
-              );
-            }
+            db.close();
+            logFile.write("Blockchain is being updated by another instance! Closing this process.\n");
+            endLogFile();
+            console.log("\x1b[41m%s\x1b[0m%s", "WARNING:", " blockchain is being updated by another instance! Closing this process.");
+            return;
           }
 
           supply = res.supply;
@@ -84,6 +84,8 @@ async function initReading() {
             { $set: { unconfirmedReceived: 0, unconfirmedSpent: 0 } },
             function(err, res) {
               if (err) {
+                logFile.write("Error while setting unconfirmed values to 0:\n" + err + "\n");
+                endLogFile();
                 throw err;
               }
 
@@ -92,6 +94,8 @@ async function initReading() {
                 { confirmed: false },
                 function(err, res) {
                   if (err) {
+                    logFile.write("Error while deleting stored unconfirmed transactions:\n" + err + "\n");
+                    endLogFile();
                     throw err;
                   }
 
@@ -127,16 +131,21 @@ async function readBlockchain(hash) {
   const lastHash = await client.getBlockHash(lastHeight);
   const lastConfirmedHash = await client.getBlockHash(lastHeight - requiredConfirmations);
 
+  logFile.write("Blocks round started (last block's index is " + lastHeight + ", while its hash is " + lastHash + ").\n");
   // Cyan background color
   console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blocks round started!");
   // White background color, black font color
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " blocks round's last block's index is " + lastHeight + ".");
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " blocks round's last block's hash is " + lastHash + ".");
 
-  while (hash != lastHash) {
+  var lastLoop = false;
+  while (!lastLoop) {
     var newTransactions = [];
-    while (newTransactions.length < transactionsPerRound && hash != lastHash) {
-      var block = await client.getBlock(hash);
+    while (newTransactions.length < transactionsPerRound && !lastLoop) {
+      // Read one last block if last
+      if(hash == lastHash) {
+        lastLoop = true;
+      }
 
       var confirmed = block.height < lastHeight - requiredConfirmations;
       var baseId = newTransactions.length;
@@ -389,25 +398,32 @@ async function readBlockchain(hash) {
         }
       }
 
-      hash = block.nextblockhash;
+      // Update hash only if not reading last block
+      if(!lastLoop) {
+        hash = block.nextblockhash;
+      }
     }
 
     transactions = transactions.concat(newTransactions);
 
+    logFile.write("Transactions round completed (" + (transactionsCount + unconfirmedTransactionsCount) + " transactions with a confirmed supply of " + supply + " VDN and an unconfirmed supply of " + unconfirmedSupply + " VDN).\n");
     // Cyan background color
     console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions round completed!");
     // White background color, black font color
     console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
   }
 
+  logFile.write("Blocks round loaded (" + (transactionsCount + unconfirmedTransactionsCount) + " transactions with a confirmed supply of " + supply + " VDN and an unconfirmed supply of " + unconfirmedSupply + " VDN).\n");
   // Cyan background color
   console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " blocks round loaded!");
   // White background color, black font color
   console.log("\x1b[47m\x1b[30m%s\x1b[0m%s", "INFO:", " after " + (transactionsCount + unconfirmedTransactionsCount) + " transactions supply is " + supply + " VDN and unconfirmed supply is " + unconfirmedSupply + " VDN.");
 
   // Connect to database
-  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, function(err, db) {
+  MongoClient.connect(mongoUrl, { socketTimeoutMS : 0, useNewUrlParser: true }, function(err, db) {
     if (err) {
+      logFile.write("Error while connecting to database:\n" + err + "\n");
+      endLogFile();
       throw err;
     }
     var dbo = db.db("markopolo");
@@ -425,9 +441,12 @@ async function readBlockchain(hash) {
       { upsert: true },
       function(err, res) {
         if (err) {
+          logFile.write("Error while updating supplies in collection \"info\":\n" + err + "\n");
+          endLogFile();
           throw err;
         }
 
+        logFile.write("Info updated succesfully!\n");
         // Cyan background color
         console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " info updated succesfully!");
 
@@ -450,9 +469,12 @@ async function readBlockchain(hash) {
         addressesBulk.execute(
           function(err, res) {
             if (err) {
+              logFile.write("Error while executing addresses bulk:\n" + err + "\n");
+              endLogFile();
               throw err;
             }
 
+            logFile.write("Addresses updated succesfully!\n");
             // Cyan background color
             console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " addresses updated succesfully!");
 
@@ -461,9 +483,12 @@ async function readBlockchain(hash) {
               transactions,
               function(err, res) {
                 if (err) {
+                  logFile.write("Error while inserting transactions in collection \"transactions\":\n" + err + "\n");
+                  endLogFile();
                   throw err;
                 }
 
+                logFile.write("Transactions updated succesfully!\n");
                 // Cyan background color
                 console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " transactions updated succesfully!");
 
@@ -476,9 +501,12 @@ async function readBlockchain(hash) {
                   { upsert: true },
                   function(err, res) {
                     if (err) {
+                      logFile.write("Error while setting status as false in collection \"info\":\n" + err + "\n");
+                      endLogFile();
                       throw err;
                     }
 
+                    logFile.write("Status updated succesfully!\n");
                     // Cyan background color
                     console.log("\x1b[44m%s\x1b[0m%s", "EVENT:", " status updated succesfully!");
 
@@ -503,4 +531,14 @@ async function readBlockchain(hash) {
   });
 }
 
-initReading();
+function endLogFile() {
+  logFile.write("----------\n");
+}
+
+try {
+  initReading();
+} catch (err) {
+  logFile.write("Unexpected error:\n" + err + "\n");
+  endLogFile();
+  throw err;
+}

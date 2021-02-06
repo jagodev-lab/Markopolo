@@ -17,7 +17,9 @@ npm install
 ```
 
 ### Second step
-- Change MongoDB and vDinar RPC credentials
+- Change MongoDB and vDinar RPC credentials in `app.js` and `scripts/blockchain.js`
+- Change Markopolo's absolute path for logging in `scripts/blockchain.js`
+- Check writing permissions for `logs` folder
 - Set `blocknotify=node Markopolo/scripts/blockchain.js` in `vdinar.conf` (change `Markopolo` to your Markopolo absolute directory)
 
 ### Third step

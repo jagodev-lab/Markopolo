@@ -9,6 +9,9 @@ const client = new Client({ username: 'testuser', password: 'testpassword', port
 const MongoClient = require('mongodb').MongoClient;
 const mongoUrl = "mongodb://localhost:27017/";
 
+const BigNumber = require('bignumber.js');
+BigNumber.set({ DECIMAL_PLACES: 8, ROUNDING_MODE: BigNumber.ROUND_HALF_DOWN })
+
 app.set('view engine', 'pug')
 
 app.use(express.static(__dirname + '/public'))
@@ -50,7 +53,20 @@ app.get('/api/v1.0/getaddress', function (req, res) {
             throw err
           }
 
-          res.json(result)
+          if (result) {
+            res.json({
+              address: result.address,
+              received: intToDecimal(result.received),
+              spent: intToDecimal(result.spent),
+              unconfirmedReceived: intToDecimal(result.unconfirmedReceived),
+              unconfirmedSpent: intToDecimal(result.unconfirmedSpent)
+            })
+          } else {
+            res.json({
+              error: true,
+              message: 'Unknown address.'
+            })
+          }
           db.close()
         }
       )
@@ -518,3 +534,8 @@ app.get('/transactions', function (req, res) {
 })
 
 app.listen(port, () => console.log(`Markopolo explorer listening on port ${port}!`))
+
+// Used to convert integers originally stored to avoid floating point precision loss when not able to use BigNumber math
+function intToDecimal(value) {
+  return new BigNumber(value.toString()).dividedBy("100000000").toString();
+}

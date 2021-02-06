@@ -28,7 +28,7 @@ function getAddressTransactions()
 
       for(var i = 0; i < result.length; i++)
       {
-        value = 0;
+        value = new BigNumber("0");
 
         date = new Date(result[i].timestamp * 1000);
         date = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
@@ -37,7 +37,7 @@ function getAddressTransactions()
         {
           if(result[i].inputs[j].sender == address)
           {
-            value -= result[i].inputs[j].value;
+            value = value.minus(result[i].inputs[j].value);
           }
         }
 
@@ -45,7 +45,7 @@ function getAddressTransactions()
         {
           if(result[i].outputs[j].recipient == address)
           {
-            value += result[i].outputs[j].value;
+            value = value.plus(result[i].outputs[j].value);
           }
         }
 
@@ -57,8 +57,8 @@ function getAddressTransactions()
             <div class=\"address-td\">\
               <a href=\"/transaction/" + result[i].transaction + "\">" + result[i].transaction + "</a>\
             </div>\
-            <div class=\"address-td " + ((value > 0) ? "received" : "spent") + "\">\
-              <span class=\"value\">" + ((value > 0) ? "+" : "") + value + "</span>\
+            <div class=\"address-td " + (value.isPositive() ? "received" : "spent") + "\">\
+              <span class=\"value\">" + (value.isPositive() ? "+" : "") + value + "</span>\
               <span class=\"currency\"> VDN</span>\
             </div>\
           </div>\
@@ -101,9 +101,9 @@ function getAddress()
     {
       const result = JSON.parse(this.responseText);
 
-      const received = result.received + result.unconfirmedReceived;
-      const spent = result.spent + result.unconfirmedSpent;
-      const credit = received - spent;
+      const received = new BigNumber(result.received).plus(result.unconfirmedReceived);
+      const spent = new BigNumber(result.spent).plus(result.unconfirmedSpent);
+      const credit = received.minus(spent);
 
       document.getElementById("addressCredit").innerHTML = credit;
       document.getElementById("addressReceived").innerHTML = received;
