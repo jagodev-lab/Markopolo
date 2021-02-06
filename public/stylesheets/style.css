@@ -1,6 +1,7 @@
 html, body
 {
   margin: 0px 0px 0px 0px;
+  min-width: 650px;
   padding: 0px 0px 0px 0px;
 }
 
@@ -18,19 +19,16 @@ a:hover, a:active, a:focus
 
 .header
 {
-  background-color: #4444aa;
+  background-color: #ff8616;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
   padding: 10px 20px 10px 20px;
   width: calc(100% - 40px);
 }
 
-.header h1
+.header .title
 {
-  color: #ffffff;
   display: inline-block;
-  font-size: 32px;
-  line-height: 40px;
-  margin: 20px 0px 20px 0px;
+  margin: 15px 0px 15px 0px;
 }
 
 .header .menu
@@ -79,7 +77,6 @@ a:hover, a:active, a:focus
 .block
 {
   display: table;
-  height: 567px;
   margin: 0px 20px 0px 20px;
   width: calc(100% - 40px);
 }
@@ -90,14 +87,26 @@ a:hover, a:active, a:focus
 .address .coin-info,
 .block .coin-info
 {
+  display: table-row;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  width: 100%;
+}
+
+.summary .coin-info .container,
+.transactions .coin-info .container,
+.transaction .coin-info .container,
+.address .coin-info .container,
+.block .coin-info .container
+{
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-  display: table-cell;
-  margin: 0px 0px 0px 0px;
+  display: inline-block;
+  margin: 0px 0px 20px 0px;
   padding: 0px 0px 0px 0px;
   text-align: center;
-  width: 400px;
+  width: 100%;
 }
 
 .summary .coin-info .preview,
@@ -144,9 +153,9 @@ a:hover, a:active, a:focus
 .address .coin-info .name,
 .block .coin-info .name
 {
-  font-size: 18px;
+  font-size: 36px;
   font-weight: bold;
-  line-height: 20px;
+  line-height: 40px;
   margin: 0px 0px 20px 0px;
 }
 
@@ -156,8 +165,8 @@ a:hover, a:active, a:focus
 .address .coin-info .value,
 .block .coin-info .value
 {
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 32px;
+  line-height: 36px;
 }
 
 .summary .coin-info a,
@@ -188,11 +197,11 @@ a:hover, a:active, a:focus
 .address .coin-info .website .title,
 .block .coin-info .website .title
 {
-  color: #4444cc;
-  font-size: 18px;
+  color: #ff6416;
+  font-size: 36px;
   font-weight: bold;
-  line-height: 20px;
-  margin: 0px 0px 5px 0px;
+  line-height: 40px;
+  margin: 0px 0px 10px 0px;
 }
 
 .summary .coin-info .website .url,
@@ -201,9 +210,9 @@ a:hover, a:active, a:focus
 .address .coin-info .website .url,
 .block .coin-info .website .url
 {
-  color: #6666cc;
-  font-size: 16px;
-  line-height: 18px;
+  color: #ee8a41;
+  font-size: 32px;
+  line-height: 36px;
 }
 
 .summary .last-blocks,
@@ -212,9 +221,10 @@ a:hover, a:active, a:focus
 .address .address-info,
 .block .block-info
 {
-  display: table-cell;
+  display: table-row;
   padding: 0px 0px 0px 20px;
   vertical-align: top;
+  width: 100%;
 }
 
 .summary .last-blocks .container,
@@ -227,7 +237,6 @@ a:hover, a:active, a:focus
   border-radius: 20px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   display: flex;
-  height: 567px;
   width: 100%;
 }
 
@@ -376,7 +385,7 @@ a:hover, a:active, a:focus
 .address .address-info .address-tr--main .address-td,
 .block .block-info .block-tr--main .block-td
 {
-  background-color: #6666cc;
+  background-color: #f4853a;
   display: table-cell;
 }
 
@@ -432,7 +441,7 @@ a:hover, a:active, a:focus
 .block .block-info .block-tr--values .block-td a:link,
 .block .block-info .block-tr--values .block-td a:visited
 {
-  color: #0000ee;
+  color: #ff6700;
   text-decoration: none;
 }
 
@@ -577,7 +586,7 @@ a:hover, a:active, a:focus
 .transaction .transaction-info .outputs-table .outputs-tr--main .outputs-td
 {
   background-color: #eeeeee;
-  color: #222244;
+  color: #222222;
   font-weight: bold;
 }
 
@@ -622,8 +631,7 @@ a:hover, a:active, a:focus
 .summary .last-blocks .blocks-footer .blocks-page,
 .transactions .last-transactions .transactions-footer .transactions-page
 {
-  background-color: #6666cc;
-  //border: 1px solid #eeeeee;
+  background-color: #f4853a;
   color: #ffffff;
   display: table-cell;
   font-size: 16px;
@@ -637,7 +645,7 @@ a:hover, a:active, a:focus
 .summary .last-blocks .blocks-footer .blocks-page:hover,
 .transactions .last-transactions .transactions-footer .transactions-page:hover
 {
-  background-color: #6666ff;
+  background-color: #ff9557;
   cursor: pointer;
 }
 
@@ -656,14 +664,14 @@ a:hover, a:active, a:focus
 .summary .last-blocks .blocks-footer .blocks-page--selected,
 .transactions .last-transactions .transactions-footer .transactions-page--selected
 {
-  background-color: #3333aa;
-  color: #999999;
+  background-color: #d94800;
+  color: #cccccc;
 }
 
 .summary .last-blocks .blocks-footer .blocks-page--selected:hover,
 .transactions .last-transactions .transactions-footer .transactions-page--selected:hover
 {
-  background-color: #3333cc;
+  background-color: #ec590a;
   cursor: default;
 }
 
@@ -718,7 +726,7 @@ a:hover, a:active, a:focus
 .api .functions .function a:link,
 .api .functions .function a:visited
 {
-  color: #0000ee;
+  color: #fe6416;
   text-decoration: none;
 }
 
@@ -729,7 +737,7 @@ a:hover, a:active, a:focus
 
 .api .functions h2
 {
-  background-color: #4444aa;
+  background-color: #ff8616;
   border-radius: 5px;
   color: #ffffff;
   display: inline-block;
@@ -803,4 +811,93 @@ a:hover, a:active, a:focus
   line-height: 18px;
   padding: 4px 10px 4px 10px;
   display: inline;
+}
+
+@media only screen and (min-device-width: 850px)
+{
+  .summary,
+  .transactions,
+  .transaction,
+  .address,
+  .block
+  {
+    height: 567px;
+  }
+
+  .summary .coin-info,
+  .transactions .coin-info,
+  .transaction .coin-info,
+  .address .coin-info,
+  .block .coin-info
+  {
+    display: table-cell;
+    width: 400px;
+  }
+
+  .summary .coin-info .container,
+  .transactions .coin-info .container,
+  .transaction .coin-info .container,
+  .address .coin-info .container,
+  .block .coin-info .container
+  {
+    margin: 0px 0px 0px 0px;
+  }
+
+  .summary .coin-info .name,
+  .transactions .coin-info .name,
+  .transaction .coin-info .name,
+  .address .coin-info .name,
+  .block .coin-info .name
+  {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  .summary .coin-info .value,
+  .transactions .coin-info .value,
+  .transaction .coin-info .value,
+  .address .coin-info .value,
+  .block .coin-info .value
+  {
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  .summary .coin-info .website .title,
+  .transactions .coin-info .website .title,
+  .transaction .coin-info .website .title,
+  .address .coin-info .website .title,
+  .block .coin-info .website .title
+  {
+    font-size: 18px;
+    line-height: 20px;
+    margin: 0px 0px 5px 0px;
+  }
+
+  .summary .coin-info .website .url,
+  .transactions .coin-info .website .url,
+  .transaction .coin-info .website .url,
+  .address .coin-info .website .url,
+  .block .coin-info .website .url
+  {
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  .summary .last-blocks,
+  .transactions .last-transactions,
+  .transaction .transaction-info,
+  .address .address-info,
+  .block .block-info
+  {
+    display: table-cell;
+    padding: 0px 0px 0px 20px;
+    width: auto;
+  }
+
+  .summary .last-blocks .container,
+  .transactions .last-transactions .container,
+  {
+    height: 567px;
+  }
 }
