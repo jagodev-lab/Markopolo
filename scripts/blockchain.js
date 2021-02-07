@@ -297,7 +297,7 @@ async function readBlockchain(hash) {
         if (addressId == -1) {
           addresses.push({ address: address, received: 0, spent: 0, unconfirmedReceived: output.value, unconfirmedSpent: 0 });
         } else {
-          addresses[addressId].received += output.value;
+          addresses[addressId].unconfirmedReceived += output.value;
         }
         // Update transactions
         newTransactions[baseId].inputs.push({
